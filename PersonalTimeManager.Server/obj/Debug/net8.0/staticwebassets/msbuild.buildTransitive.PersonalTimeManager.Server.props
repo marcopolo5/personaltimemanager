@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\PersonalTimeManager.Server.props" />
+</Project>

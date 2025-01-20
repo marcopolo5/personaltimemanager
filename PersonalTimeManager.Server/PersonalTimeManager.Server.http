@@ -1,0 +1,6 @@
+@PersonalTimeManager.Server_HostAddress = http://localhost:5179
+
+GET {{PersonalTimeManager.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

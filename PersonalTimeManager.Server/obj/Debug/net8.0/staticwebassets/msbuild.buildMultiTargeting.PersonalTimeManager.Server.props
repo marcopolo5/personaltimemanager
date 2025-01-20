@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\PersonalTimeManager.Server.props" />
+</Project>
