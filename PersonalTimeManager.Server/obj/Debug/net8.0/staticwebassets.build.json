@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "gs+BHCcpNSN2/eHzg0a9pF6/8M8rpgPFHFQ2+sEmtQw=",
+  "Hash": "l8ECWP0ZZAhrH8jf9iNaHWOFUf6M5CkVUdmh5n+tDJY=",
   "Source": "PersonalTimeManager.Server",
   "BasePath": "_content/PersonalTimeManager.Server",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\stell\\source\\repos\\PersonalTimeManager\\personaltimemanager.client\\personaltimemanager.client.esproj",
+      "Identity": "D:\\personaltimemanager\\personaltimemanager.client\\personaltimemanager.client.esproj",
       "Version": 2,
       "Source": "personaltimemanager.client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
@@ -19,5 +19,6 @@
     }
   ],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

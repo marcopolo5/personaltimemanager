@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PersonalTimeManager.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e16f6d2434500b17670903187eb136c8630bb38")]
 [assembly: System.Reflection.AssemblyProductAttribute("PersonalTimeManager.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PersonalTimeManager.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
