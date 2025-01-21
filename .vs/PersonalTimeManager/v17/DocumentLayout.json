@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "D:\\personaltimemanager\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{51E0CCA2-C920-4FA6-86D5-4D58300E6031}|PersonalTimeManager.Server\\PersonalTimeManager.Server.csproj|d:\\personaltimemanager\\personaltimemanager.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51E0CCA2-C920-4FA6-86D5-4D58300E6031}|PersonalTimeManager.Server\\PersonalTimeManager.Server.csproj|solutionrelative:personaltimemanager.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51E0CCA2-C920-4FA6-86D5-4D58300E6031}|PersonalTimeManager.Server\\PersonalTimeManager.Server.csproj|d:\\personaltimemanager\\personaltimemanager.server\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51E0CCA2-C920-4FA6-86D5-4D58300E6031}|PersonalTimeManager.Server\\PersonalTimeManager.Server.csproj|solutionrelative:personaltimemanager.server\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{51E0CCA2-C920-4FA6-86D5-4D58300E6031}|PersonalTimeManager.Server\\PersonalTimeManager.Server.csproj|d:\\personaltimemanager\\personaltimemanager.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{51E0CCA2-C920-4FA6-86D5-4D58300E6031}|PersonalTimeManager.Server\\PersonalTimeManager.Server.csproj|solutionrelative:personaltimemanager.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -44,11 +52,38 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\personaltimemanager\\PersonalTimeManager.Server\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "PersonalTimeManager.Server\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\personaltimemanager\\PersonalTimeManager.Server\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "PersonalTimeManager.Server\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-21T16:03:41.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\personaltimemanager\\PersonalTimeManager.Server\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "PersonalTimeManager.Server\\Controllers\\UsersController.cs",
+              "ToolTip": "D:\\personaltimemanager\\PersonalTimeManager.Server\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "PersonalTimeManager.Server\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAYwDgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-21T14:59:13.031Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\personaltimemanager\\PersonalTimeManager.Server\\Program.cs",
               "RelativeDocumentMoniker": "PersonalTimeManager.Server\\Program.cs",
               "ToolTip": "D:\\personaltimemanager\\PersonalTimeManager.Server\\Program.cs",
               "RelativeToolTip": "PersonalTimeManager.Server\\Program.cs",
+<<<<<<< Updated upstream
               "ViewState": "AgIAADQAAAAAAAAAAAAAAEUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-20T19:58:14.743Z",
@@ -66,6 +101,11 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-20T19:57:12.783Z",
               "EditorCaption": ""
+=======
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-21T14:58:31.392Z"
+>>>>>>> Stashed changes
             }
           ]
         }

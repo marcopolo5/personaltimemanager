@@ -68,7 +68,6 @@ D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\staticwebasse
 D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.PersonalTimeManager.Server.props
 D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.PersonalTimeManager.Server.props
 D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\staticwebassets.pack.json
-D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\Personal.F6150FEC.Up2Date
 D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\PersonalTimeManager.Server.dll
 D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\refint\PersonalTimeManager.Server.dll
@@ -99,4 +98,9 @@ D:\personaltimemanager\PersonalTimeManager.Server\bin\Debug\net8.0\Grpc.Core.Api
 D:\personaltimemanager\PersonalTimeManager.Server\bin\Debug\net8.0\Grpc.Net.Client.dll
 D:\personaltimemanager\PersonalTimeManager.Server\bin\Debug\net8.0\Grpc.Net.Common.dll
 D:\personaltimemanager\PersonalTimeManager.Server\bin\Debug\net8.0\System.Linq.Async.dll
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+D:\personaltimemanager\PersonalTimeManager.Server\bin\Debug\net8.0\PersonalTimeManager.Server.staticwebassets.runtime.json
+D:\personaltimemanager\PersonalTimeManager.Server\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 >>>>>>> Stashed changes

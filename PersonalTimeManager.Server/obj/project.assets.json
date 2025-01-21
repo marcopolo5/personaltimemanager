@@ -293,6 +293,9 @@
           }
         }
       },
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       "Microsoft.AspNetCore.SpaProxy/8.0.12": {
         "type": "package",
@@ -354,6 +357,9 @@
           "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       "Microsoft.OpenApi/1.2.3": {
         "type": "package",
@@ -540,6 +546,9 @@
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       }
     }
@@ -962,6 +971,9 @@
         "packageIcon.png"
       ]
     },
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     "Microsoft.AspNetCore.SpaProxy/8.0.12": {
       "sha512": "3FCqH7rdZVENLCSbBwiX9K034j5fUbqh8qk14Etj4pROGZGqH/nzlFZ+LdT/S2MtpWJSOUJLTT72Xk/Jf6+UVw==",
@@ -1288,6 +1300,9 @@
         "useSharedDesignerContext.txt"
       ]
     },
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     "Microsoft.OpenApi/1.2.3": {
       "sha512": "Nug3rO+7Kl5/SBAadzSMAVgqDlfGjJZ0GenQrLywJ84XGKO0uRqkunz5Wyl0SDwcR71bAATXvSdbdzPrYRYKGw==",
@@ -1551,6 +1566,9 @@
         "system.runtime.compilerservices.unsafe.nuspec",
         "useSharedDesignerContext.txt"
       ]
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
   },
@@ -1560,6 +1578,9 @@
 =======
       "FirebaseAdmin >= 3.1.0",
       "Google.Cloud.Firestore >= 3.9.0",
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       "Microsoft.AspNetCore.SpaProxy >= 8.*-*",
       "Swashbuckle.AspNetCore >= 6.4.0"
@@ -1619,6 +1640,9 @@
             "target": "Package",
             "version": "[3.9.0, )"
           },
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
           "Microsoft.AspNetCore.SpaProxy": {
             "target": "Package",

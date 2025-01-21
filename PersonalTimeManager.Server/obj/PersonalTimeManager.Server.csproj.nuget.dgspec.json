@@ -55,6 +55,9 @@
               "target": "Package",
               "version": "[3.9.0, )"
             },
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             "Microsoft.AspNetCore.SpaProxy": {
               "target": "Package",

@@ -1,7 +1,11 @@
 {
   "version": 2,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "dgSpecHash": "fUhvzsO4md4=",
+=======
+  "dgSpecHash": "r4R1XdmEcQ8=",
+>>>>>>> Stashed changes
 =======
   "dgSpecHash": "r4R1XdmEcQ8=",
 >>>>>>> Stashed changes
@@ -51,6 +55,9 @@
     "C:\\Users\\Asus\\.nuget\\packages\\system.linq.async\\6.0.1\\system.linq.async.6.0.1.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\system.management\\7.0.2\\system.management.7.0.2.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   ],
   "logs": []

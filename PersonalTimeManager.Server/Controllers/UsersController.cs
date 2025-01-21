@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 ﻿using Google.Cloud.Firestore;
+=======
+using Google.Cloud.Firestore;
+>>>>>>> Stashed changes
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +16,11 @@ namespace PersonalTimeManager.Server.Controllers
 
         public UsersController()
         {
+<<<<<<< Updated upstream
             _firestoreDb = FirestoreDb.Create("personaltimemanager"); 
+=======
+            _firestoreDb = FirestoreDb.Create("personaltimemanager");
+>>>>>>> Stashed changes
         }
 
         [HttpPost("register")]
@@ -25,7 +33,11 @@ namespace PersonalTimeManager.Server.Controllers
                     return BadRequest(new { message = "Name, Email, and Password are required." });
                 }
 
+<<<<<<< Updated upstream
                 
+=======
+
+>>>>>>> Stashed changes
                 UserRecordArgs userArgs = new UserRecordArgs
                 {
                     Email = userModel.Email,
@@ -35,7 +47,11 @@ namespace PersonalTimeManager.Server.Controllers
 
                 UserRecord userRecord = await FirebaseAuth.DefaultInstance.CreateUserAsync(userArgs);
 
+<<<<<<< Updated upstream
                 
+=======
+
+>>>>>>> Stashed changes
                 var usersCollection = _firestoreDb.Collection("users");
                 var newUser = new Dictionary<string, object>
                 {
@@ -63,3 +79,7 @@ namespace PersonalTimeManager.Server.Controllers
         public string Password { get; set; }
     }
 }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes

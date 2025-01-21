@@ -1,6 +1,10 @@
 {
   "Version": 1,
+<<<<<<< Updated upstream
   "Hash": "gs+BHCcpNSN2/eHzg0a9pF6/8M8rpgPFHFQ2+sEmtQw=",
+=======
+  "Hash": "0CJUjEFuaO/CqNgBMcquy95DvaKbTF6g/onu285eqvI=",
+>>>>>>> Stashed changes
   "Source": "PersonalTimeManager.Server",
   "BasePath": "_content/PersonalTimeManager.Server",
   "Mode": "Default",
@@ -18,6 +22,20 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],
+<<<<<<< Updated upstream
   "DiscoveryPatterns": [],
   "Assets": []
+=======
+  "DiscoveryPatterns": [
+    {
+      "Name": "PersonalTimeManager.Server\\wwwroot",
+      "Source": "PersonalTimeManager.Server",
+      "ContentRoot": "D:\\personaltimemanager\\PersonalTimeManager.Server\\wwwroot\\",
+      "BasePath": "_content/PersonalTimeManager.Server",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [],
+  "Endpoints": []
+>>>>>>> Stashed changes
 }
