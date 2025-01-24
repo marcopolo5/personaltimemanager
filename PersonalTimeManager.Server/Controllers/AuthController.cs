@@ -30,24 +30,28 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Register request)
     {
+        // all fields validation
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
             return BadRequest(new { message = "Name, Email, and Password are required." });
         }
 
+        // email validation
         if (!Regex.IsMatch(request.Email, @"^[^\s@]+@[^\s@]+\.[^\s@]+$"))
         {
             return BadRequest(new { message = "Invalid email format." });
         }
 
-        if (!Regex.IsMatch(request.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"))
-        {
-            return BadRequest(new { message = "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character." });
-        }
-
+        // password match validation
         if (request.Password != request.ConfirmPassword)
         {
             return BadRequest(new { message = "Passwords do not match." });
+        }
+
+        // password validation
+        if (!Regex.IsMatch(request.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"))
+        {
+            return BadRequest(new { message = "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character." });
         }
 
         try
