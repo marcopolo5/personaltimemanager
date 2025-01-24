@@ -32,3 +32,6 @@ Thumbs.db
 Desktop.ini
 *.bak
 .DS_Store
+
+
+appsettings.json
