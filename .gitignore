@@ -1,7 +1,6 @@
-Keys/*
+PersonalTimeManager.Server/Keys.
 
 *.vsidx
-
 
 bin/
 obj/
@@ -32,6 +31,5 @@ Thumbs.db
 Desktop.ini
 *.bak
 .DS_Store
-
 
 appsettings.json
