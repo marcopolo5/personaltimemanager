@@ -1,30 +1,30 @@
 <div class="login-container">
-    <div class="login-card">
-      <h2>Login</h2>
-      <form>
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input
-            id="username"
-            type="text"
-            class="form-control"
-            placeholder="Enter your username"
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            class="form-control"
-            placeholder="Enter your password"
-          />
-        </div>
-        <button type="submit" class="btn-login">Login</button>
-      </form>
-      <p class="not-registered">
-        Not registered yet? <a class="register-link" routerLink="/register">Click here</a>
-      </p>
-    </div>
+  <div class="login-card">
+    <h2>Login</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="Enter your email" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          class="form-control"
+          formControlName="password"
+          placeholder="Enter your password" />
+      </div>
+      <button type="submit" class="btn-login">Login</button>
+    </form>
+    <p class="not-registered">
+      Not registered yet? <a class="register-link" routerLink="/register">Click
+        here</a>
+    </p>
   </div>
-  
+</div>
