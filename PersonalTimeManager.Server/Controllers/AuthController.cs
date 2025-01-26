@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore.V1;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 using PersonalTimeManager.Server.Models;
-using PersonalTimeManager.Server.Services;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -13,50 +13,44 @@ public class AuthController : ControllerBase
 {
     private readonly FirebaseAuth _auth;
     private readonly FirestoreDb _firestoreDb;
-    private readonly IConfiguration _configuration;
-    private readonly JwtService _jwtService;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IConfiguration configuration, JwtService jwtService)
+    public AuthController(ILogger<AuthController> logger)
     {
         _auth = FirebaseAuth.DefaultInstance;
         _firestoreDb = FirestoreDb.Create("personaltimemanager", new FirestoreClientBuilder
         {
             Credential = GoogleCredential.FromFile("Keys/serviceAccountKey.json")
         }.Build());
-        _configuration = configuration;
-        _jwtService = jwtService;
+        _logger = logger;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Register request)
     {
-        // all fields validation
+        _logger.LogInformation("Register endpoint called with data: {@Request}", request);
+
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
+            _logger.LogWarning("Missing required fields in Register request.");
             return BadRequest(new { message = "Name, Email, and Password are required." });
         }
 
-        // email validation
         if (!Regex.IsMatch(request.Email, @"^[^\s@]+@[^\s@]+\.[^\s@]+$"))
         {
+            _logger.LogWarning("Invalid email format: {Email}", request.Email);
             return BadRequest(new { message = "Invalid email format." });
         }
 
-        // password match validation
-        if (request.Password != request.ConfirmPassword)
-        {
-            return BadRequest(new { message = "Passwords do not match." });
-        }
-
-        // password validation
         if (!Regex.IsMatch(request.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"))
         {
+            _logger.LogWarning("Weak password provided.");
             return BadRequest(new { message = "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character." });
         }
 
         try
         {
-            // Create user in Firebase Authentication
+            _logger.LogInformation("Creating user in Firebase Authentication...");
             var userRecordArgs = new UserRecordArgs
             {
                 Email = request.Email,
@@ -65,8 +59,9 @@ public class AuthController : ControllerBase
             };
 
             var userRecord = await _auth.CreateUserAsync(userRecordArgs);
+            _logger.LogInformation("User created in Firebase: {Uid}", userRecord.Uid);
 
-            // Add user to Firestore
+            _logger.LogInformation("Saving user to Firestore...");
             var userDocument = new Dictionary<string, object>
             {
                 { "uid", userRecord.Uid },
@@ -75,18 +70,20 @@ public class AuthController : ControllerBase
                 { "created_at", Timestamp.GetCurrentTimestamp() }
             };
 
-            var usersCollection = _firestoreDb.Collection("users");
-            await usersCollection.Document(userRecord.Uid).SetAsync(userDocument);
+            await _firestoreDb.Collection("users").Document(userRecord.Uid).SetAsync(userDocument);
+            _logger.LogInformation("User saved to Firestore successfully.");
 
-            // Generate JWT Token
-            var token = _jwtService.GenerateJwtToken(userRecord.Uid);
+            _logger.LogInformation("Generating custom Firebase token...");
+            var token = await _auth.CreateCustomTokenAsync(userRecord.Uid);
+            _logger.LogInformation("Token generated successfully: {Token}", token);
 
             return Ok(new
             {
-                message = "User registered successfully in Authentication and Firestore.",
+                message = "User registered successfully.",
                 token,
                 user = new
                 {
+                    uid = userRecord.Uid,
                     name = request.Name,
                     email = request.Email
                 }
@@ -94,6 +91,7 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error occurred during user registration.");
             return StatusCode(500, new { message = ex.Message });
         }
     }
@@ -101,33 +99,31 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] Login request)
     {
+        _logger.LogInformation("Login endpoint called with email: {Email}", request.Email);
+
         if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
+            _logger.LogWarning("Missing required fields in Login request.");
             return BadRequest(new { message = "Email and Password are required." });
         }
 
         try
         {
-            // Retrieve user by email from Firebase Authentication
+            _logger.LogInformation("Fetching user from Firebase by email: {Email}", request.Email);
             var user = await _auth.GetUserByEmailAsync(request.Email);
+            _logger.LogInformation("User fetched from Firebase: {Uid}", user.Uid);
 
-            // Verify password (this assumes FirebaseAuth manages password verification)
-            if (user == null)
-            {
-                return Unauthorized(new { message = "Invalid email or password." });
-            }
-
-            // Retrieve user data from Firestore
+            _logger.LogInformation("Validating user exists in Firestore...");
             var docSnapshot = await _firestoreDb.Collection("users").Document(user.Uid).GetSnapshotAsync();
             if (!docSnapshot.Exists)
             {
-                return Unauthorized(new { message = "User not found in Firestore." });
+                _logger.LogWarning("User not found in Firestore: {Uid}", user.Uid);
+                return Unauthorized(new { message = "User not found." });
             }
 
-            var userData = docSnapshot.ToDictionary();
-
-            // Generate JWT Token
-            var token = _jwtService.GenerateJwtToken(user.Uid);
+            _logger.LogInformation("Generating custom Firebase token...");
+            var token = await _auth.CreateCustomTokenAsync(user.Uid);
+            _logger.LogInformation("Token generated successfully: {Token}", token);
 
             return Ok(new
             {
@@ -136,14 +132,15 @@ public class AuthController : ControllerBase
                 user = new
                 {
                     uid = user.Uid,
-                    name = userData["name"],
-                    email = userData["email"],
-                    created_at = userData["created_at"]
+                    name = docSnapshot.GetValue<string>("name"),
+                    email = docSnapshot.GetValue<string>("email"),
+                    created_at = docSnapshot.GetValue<Timestamp>("created_at").ToDateTime()
                 }
             });
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error occurred during user login.");
             return StatusCode(500, new { message = ex.Message });
         }
     }
