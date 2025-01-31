@@ -1,0 +1,39 @@
+<div class="register-container">
+  <div class="register-card">
+      <h2>Add Task</h2>
+      <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+              <label for="task-name">Task Name</label>
+              <input type="text" id="task-name" class="form-control" formControlName="taskName" placeholder="Enter task name">
+          </div>
+          <div class="form-group">
+              <label for="description">Task Description</label>
+              <textarea id="description" class="form-control" rows="4" formControlName="description" placeholder="Enter task description"></textarea>
+          </div>
+          <div class="form-group">
+              <label for="task-type">Task Type</label>
+              <select id="task-type" class="form-control" formControlName="taskType">
+                  <option value="" disabled selected>Select task type</option>
+                  <option value="one-time">One-time task</option>
+                  <option value="ongoing-task">Ongoing task</option>
+              </select>
+          </div>
+          <div class="form-container">
+              <div class="form-group">
+                  <label for="start-date">Start Date</label>
+                  <input type="date" id="start-date" class="form-control" formControlName="startDate">
+              </div>
+              <div class="form-group">
+                  <label for="deadline">Deadline</label>
+                  <input type="date" id="deadline" class="form-control" formControlName="deadline">
+              </div>
+          </div>
+          
+          <!-- Form Buttons (Cancel on the left, Add Task on the right) -->
+          <div class="form-buttons">
+              <button type="button" class="btn-cancel">Cancel</button>
+              <button type="submit" class="btn-register" [disabled]="taskForm.invalid">Add Task</button>
+          </div>
+      </form>
+  </div>
+</div>
