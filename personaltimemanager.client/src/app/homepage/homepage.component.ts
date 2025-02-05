@@ -52,4 +52,8 @@ export class HomepageComponent {
   addTask(): void {
     console.log('Add Task Button Clicked!');
   }
+
+  toggleTaskCompletion(task: Task): void {
+    task.completed = !task.completed;
+  }
 }

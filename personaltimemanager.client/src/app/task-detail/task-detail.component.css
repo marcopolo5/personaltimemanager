@@ -10,7 +10,7 @@
   }
   
   .delete-btn {
-    background: red;
+    background: #c31729;
     color: white;
     border: none;
     padding: 8px 15px;
@@ -28,10 +28,10 @@
   }
   
   .delete-btn:hover {
-    background: darkred;
+    opacity: 0.8;
   }
   
   .close-btn:hover {
-    background: darkgray;
+    opacity: 0.8;
   }
   
