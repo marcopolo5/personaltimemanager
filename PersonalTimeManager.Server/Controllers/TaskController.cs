@@ -4,7 +4,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore.V1;
 
 [ApiController]
-[Route("api/tasks")]
+[Route("api/[controller]")]
 public class TasksController : ControllerBase
 {
     private readonly FirestoreDb _firestoreDb;
@@ -37,7 +37,7 @@ public class TasksController : ControllerBase
     }
 
     // Get task by ID
-    [HttpGet("{id}")]
+    [HttpGet("{taskId}")]
     public async Task<IActionResult> GetTaskById(string id)
     {
         var task = new TaskEntity
@@ -56,7 +56,7 @@ public class TasksController : ControllerBase
     }
 
     // Get tasks by user ID
-    [HttpGet("user/{userId}")]
+    [HttpGet("Users/{userId}")]
     public async Task<IActionResult> GetTasksByUserId(string userId)
     {
         var tasks = new List<TaskEntity>
