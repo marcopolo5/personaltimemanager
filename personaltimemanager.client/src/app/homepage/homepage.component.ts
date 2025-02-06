@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
+import { Router } from '@angular/router';
 
 interface Task {
   taskName: string;
@@ -40,7 +41,7 @@ export class HomepageComponent {
     }
   ];
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private router: Router) {}
 
   openTaskDetails(task: Task): void {
     this.dialog.open(TaskDetailComponent, {
@@ -51,6 +52,7 @@ export class HomepageComponent {
 
   addTask(): void {
     console.log('Add Task Button Clicked!');
+    this.router.navigate(['add-task']);
   }
 
   toggleTaskCompletion(task: Task): void {

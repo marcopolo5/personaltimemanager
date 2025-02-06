@@ -28,10 +28,10 @@
                   <input type="date" id="deadline" class="form-control" formControlName="deadline">
               </div>
           </div>
-          
+
           <!-- Form Buttons (Cancel on the left, Add Task on the right) -->
           <div class="form-buttons">
-              <button type="button" class="btn-cancel">Cancel</button>
+              <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
               <button type="submit" class="btn-register" [disabled]="taskForm.invalid">Add Task</button>
           </div>
       </form>

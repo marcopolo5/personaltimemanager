@@ -8,7 +8,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'AddTask', component: AddTaskComponent},
+  { path: 'add-task', component: AddTaskComponent},
   { path: 'home', component: HomepageComponent },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
