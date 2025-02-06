@@ -1,0 +1,37 @@
+.modal {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .delete-btn {
+    background: #c31729;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .close-btn {
+    background: gray;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .delete-btn:hover {
+    opacity: 0.8;
+  }
+  
+  .close-btn:hover {
+    opacity: 0.8;
+  }
+  

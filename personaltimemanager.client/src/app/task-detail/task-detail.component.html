@@ -1,0 +1,14 @@
+<div class="modal">
+    <h2>{{ task.taskName }}</h2>
+    <p><strong>Description:</strong> {{ task.description }}</p>
+    <p><strong>Tip:</strong> {{ task.tip }}</p>
+    <p><strong>Task Date:</strong> {{ task.taskDate }}</p>
+    <p><strong>Start Time:</strong> {{ task.startDate }}</p>
+    <p><strong>Deadline:</strong> {{ task.deadline }}</p>
+  
+    <div class="modal-actions">
+      <button class="delete-btn" (click)="deleteTask()">Delete</button>
+      <button class="close-btn" (click)="close()">Close</button>
+    </div>
+  </div>
+  

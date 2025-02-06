@@ -1,27 +1,44 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AddTaskComponent } from './add-task/add-task.component';
-import { ReactiveFormsModule } from '@angular/forms';  // <-- Import this
+import { HomepageComponent } from './homepage/homepage.component';
+import { TaskDetailComponent } from './task-detail/task-detail.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
+import { CardModule } from 'primeng/card';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
-    LoginComponent, 
+    LoginComponent,
+    HomepageComponent,
+    TaskDetailComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    AddTaskComponent, 
+    AddTaskComponent,
+    CardModule,
+    CheckboxModule,
+    ButtonModule,
+    DialogModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
