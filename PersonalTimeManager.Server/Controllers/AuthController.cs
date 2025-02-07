@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore.V1;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
 using PersonalTimeManager.Server.Models;
 
 [ApiController]

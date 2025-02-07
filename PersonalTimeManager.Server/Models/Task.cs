@@ -1,10 +1,10 @@
 using Google.Cloud.Firestore;
 
-[FirestoreData]
+[FirestoreData] 
 public class TaskEntity
 {
-    [FirestoreDocumentId]
-    public string Id { get; set; }
+    [FirestoreProperty]
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [FirestoreProperty]
     public string UserId { get; set; }
@@ -19,11 +19,11 @@ public class TaskEntity
     public string Type { get; set; }
 
     [FirestoreProperty]
-    public List<string> Dates { get; set; } = new List<string>();
+    public DateTime StartTime { get; set; }
 
     [FirestoreProperty]
-    public Timestamp CreatedAt { get; set; }
+    public DateTime EndTime { get; set; }
 
     [FirestoreProperty]
-    public Timestamp UpdatedAt { get; set; }
+    public List<string> Dates { get; set; }
 }
