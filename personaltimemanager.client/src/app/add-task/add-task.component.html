@@ -19,7 +19,7 @@
               </select>
           </div>
           <div class="form-container">
-              <div class="form-group">
+              <div class="form-group" *ngIf="taskForm.get('taskType')?.value==='ongoing-task'">
                   <label for="start-date">Start Date</label>
                   <input type="date" id="start-date" class="form-control" formControlName="startDate">
               </div>
@@ -28,8 +28,16 @@
                   <input type="date" id="deadline" class="form-control" formControlName="deadline">
               </div>
           </div>
-
-          <!-- Form Buttons (Cancel on the left, Add Task on the right) -->
+          <div class="form-container">
+            <div class="form-group" *ngIf="taskForm.get('taskType')?.value==='ongoing-task'">
+                <label for="start-date">Start Time</label>
+                <input type="time" id="start-time" class="form-control" formControlName="startTime">
+            </div>
+            <div class="form-group">
+                <label for="deadline">End Time</label>
+                <input type="time" id="end-time" class="form-control" formControlName="endTime">
+            </div>
+        </div>
           <div class="form-buttons">
               <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
               <button type="submit" class="btn-register" [disabled]="taskForm.invalid">Add Task</button>

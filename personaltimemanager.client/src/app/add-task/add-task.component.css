@@ -15,11 +15,9 @@ body {
 
 .register-card {
   width: 100%;
-  max-width: 900px;
-  padding: 30px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  /*box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);*/
 }
 
 .register-card h2 {
@@ -88,6 +86,10 @@ body {
 
 .btn-register:hover {
   background-color: #218838;
+}
+
+.btn-register:disabled {
+  background-color: #ccc;
 }
 
 /* Cancel Button Styles */
