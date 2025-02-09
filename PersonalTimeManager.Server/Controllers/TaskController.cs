@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Google.Cloud.Firestore;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore.V1;
-using System.Collections;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/Users/{userId}/tasks")]
 public class TaskController : ControllerBase
 {
     private readonly FirestoreDb _firestoreDb;
@@ -21,38 +23,24 @@ public class TaskController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("add")]
-    public async Task<IActionResult> AddTask([FromBody] TaskEntity request)
+    [HttpPost]
+    public async Task<IActionResult> AddTask(string userId, [FromBody] TaskEntity request)
     {
-        _logger.LogInformation("Adding a new task: {@Request}", request);
+        _logger.LogInformation("Adding a new task for user {UserId}: {@Request}", userId, request);
 
-        if (string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.Name))
+        if (string.IsNullOrEmpty(request.Name))
         {
-            return BadRequest(new { message = "UserId and Name are required." });
+            return BadRequest(new { message = "Task Name is required." });
         }
 
+        request.UserId = userId;
         DocumentReference docRef = await _firestoreDb.Collection(CollectionName).AddAsync(request);
         request.Id = docRef.Id;
 
-        return Ok(new { message = "Task added successfully.", task = request });
+        return StatusCode(201, new { message = "Task added successfully.", data = request });
     }
 
-    [HttpGet("{taskId}")]
-    public async Task<IActionResult> GetTaskById(string taskId)
-    {
-        DocumentReference docRef = _firestoreDb.Collection(CollectionName).Document(taskId);
-        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-
-        if (!snapshot.Exists)
-        {
-            return NotFound(new { message = "Task not found." });
-        }
-
-        TaskEntity task = snapshot.ConvertTo<TaskEntity>();
-        return Ok(task);
-    }
-
-    [HttpGet("user/{userId}")]
+    [HttpGet]
     public async Task<IActionResult> GetUserTasks(string userId)
     {
         Query query = _firestoreDb.Collection(CollectionName).WhereEqualTo("UserId", userId);
@@ -64,30 +52,53 @@ public class TaskController : ControllerBase
             tasks.Add(doc.ConvertTo<TaskEntity>());
         }
 
-        return Ok(tasks);
+        return Ok(new { message = "Tasks retrieved successfully.", data = tasks });
     }
 
-    [HttpPut("{taskId}")]
-    public async Task<IActionResult> UpdateTask(string taskId, [FromBody] TaskEntity request)
+    [HttpGet("{taskId}")]
+    public async Task<IActionResult> GetTaskById(string userId, string taskId)
     {
         DocumentReference docRef = _firestoreDb.Collection(CollectionName).Document(taskId);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
-        if (!snapshot.Exists)
+        if (!snapshot.Exists || snapshot.GetValue<string>("UserId") != userId)
         {
-            return NotFound(new { message = "Task not found." });
+            return NotFound(new { message = "Task not found for this user." });
         }
 
+        TaskEntity task = snapshot.ConvertTo<TaskEntity>();
+        return Ok(new { message = "Task retrieved successfully.", data = task });
+    }
+
+    [HttpPut("{taskId}")]
+    public async Task<IActionResult> UpdateTask(string userId, string taskId, [FromBody] TaskEntity request)
+    {
+        DocumentReference docRef = _firestoreDb.Collection(CollectionName).Document(taskId);
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+        if (!snapshot.Exists || snapshot.GetValue<string>("UserId") != userId)
+        {
+            return NotFound(new { message = "Task not found for this user." });
+        }
+
+        request.UserId = userId;
         await docRef.SetAsync(request, SetOptions.Overwrite);
-        return Ok(new { message = "Task updated successfully." });
+
+        return Ok(new { message = "Task updated successfully.", data = request });
     }
 
     [HttpDelete("{taskId}")]
-    public async Task<IActionResult> DeleteTask(string taskId)
+    public async Task<IActionResult> DeleteTask(string userId, string taskId)
     {
         DocumentReference docRef = _firestoreDb.Collection(CollectionName).Document(taskId);
-        await docRef.DeleteAsync();
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
-        return Ok(new { message = "Task deleted successfully." });
+        if (!snapshot.Exists || snapshot.GetValue<string>("UserId") != userId)
+        {
+            return NotFound(new { message = "Task not found for this user." });
+        }
+
+        await docRef.DeleteAsync();
+        return StatusCode(204);
     }
 }
