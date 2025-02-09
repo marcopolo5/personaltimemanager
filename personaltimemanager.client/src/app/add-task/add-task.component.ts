@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-task',
   standalone: true,
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.css'],
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, CommonModule],
 })
 export class AddTaskComponent implements OnInit {
   taskForm!: FormGroup;
@@ -20,10 +21,11 @@ export class AddTaskComponent implements OnInit {
     this.taskForm = this.fb.group({
       taskName: ['', Validators.required],
       description: ['', Validators.required],
-      tip: [''],
-      taskDate: ['', Validators.required],
-      startDate: ['', Validators.required],
-      deadline: ['', Validators.required]
+      taskType: [''],
+      startDate: [''],
+      deadline: ['', Validators.required],
+      startTime: [''],
+      endTime: ['', Validators.required],
     });
   }
 
@@ -39,6 +41,7 @@ export class AddTaskComponent implements OnInit {
           //
         },
         complete: () => {
+          this.taskForm.reset();
           console.log('completed...');
         }
       });
