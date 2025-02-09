@@ -71,13 +71,13 @@ export class AddTaskComponent implements OnInit {
 
   initForm() {
     this.taskForm = this.fb.group({
-      name: [this.task.name, Validators.required],
-      description: [this.task.description, Validators.required],
-      taskType: [this.task.type, Validators.required],
-      startDate: [this.task.dates[0]],
-      deadline: [this.task.dates.at(-1), Validators.required],
-      startTime: [this.task.startTime],
-      endTime: [this.task.endTime, Validators.required],
+      name: [this.task.name || '', Validators.required],
+      description: [this.task.description || '', Validators.required],
+      taskType: [this.task.type || '', Validators.required],
+      startDate: [this.task.dates.length === 1 ? '' : this.task.dates[0]],
+      deadline: [this.task.dates.at(-1) || '', Validators.required],
+      startTime: [this.task.startTime || ''],
+      endTime: [this.task.endTime || '', Validators.required],
     });
 
     console.log(this.taskForm.value);
@@ -181,13 +181,11 @@ export class AddTaskComponent implements OnInit {
     const startTime = this.taskForm.get('startTime')?.value;
     const endTime = this.taskForm.get('endTime')?.value;
 
-    if (!startDate && !startTime && deadline && endTime) {
+    if (!startDate && (!startTime || startTime === '--:--') && deadline && endTime) {
       return true;
     }
 
-    if (!startDate || !startTime || !deadline || !endTime) {
-      return false;
-    }
+    console.log(startDate, deadline, startTime, endTime);
 
     const startDateTime = this.combineDateTime(startDate, startTime);
     const endDateTime = this.combineDateTime(deadline, endTime);
