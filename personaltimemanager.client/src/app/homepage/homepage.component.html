@@ -1,15 +1,15 @@
 <div class="container">
     <h2>Today's Tasks</h2>
-  
+
     <div class="task-list">
         <p-card *ngFor="let task of tasks" class="task-card">
             <div class="task-header">
                 <div class="task-content" (click)="openTaskDetails(task)">
-                  <h3 [ngClass]="{'completed-text': task.completed}">{{ task.taskName }}</h3>
+                  <h3 [ngClass]="{'completed-text': task.completed}">{{ task.name }}</h3>
                     <p><strong>Start:</strong> {{ task.startTime }} - <strong>End:</strong> {{ task.endTime }}</p>
                 </div>
-                <button 
-                class="complete-btn" 
+                <button
+                class="complete-btn"
                 [class.completed]="task.completed"
                 (click)="toggleTaskCompletion(task)">
                 {{ task.completed ? "Undo" : "Complete" }}
@@ -17,7 +17,6 @@
             </div>
         </p-card>
     </div>
-  
+
     <button pButton label="Add Task" icon="pi pi-plus" class="add-btn" (click)="addTask()"></button>
   </div>
-  

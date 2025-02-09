@@ -1,19 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
 import { Router } from '@angular/router';
+import { Task } from '../models/Task';
+import { TaskService } from '../services/task.service';
+import { UserSubject } from '../subjects/user.subject';
+import { User } from '../models/User';
 
-interface Task {
-  id: string;
-  userId: string;
-  taskName: string;
-  description: string;
-  type: 'ongoing' | 'one-time';
-  startTime: string;
-  endTime: string;
-  dates: string[]; 
-  completed: boolean;
-}
 
 @Component({
   standalone: false,
@@ -21,33 +14,31 @@ interface Task {
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
-export class HomepageComponent {
-  tasks: Task[] = [
-    {
-      id: '1',
-      userId: 'user123',
-      taskName: 'Team Meeting',
-      description: 'Discuss project updates and next steps.',
-      type: 'one-time',
-      startTime: '09:00 AM',
-      endTime: '10:00 AM',
-      dates: [new Date().toISOString().split('T')[0]], 
-      completed: false
-    },
-    {
-      id: '2',
-      userId: 'user456',
-      taskName: 'Write Report',
-      description: 'Complete the quarterly report for review.',
-      type: 'ongoing',
-      startTime: '11:00 AM',
-      endTime: '01:00 PM',
-      dates: ['2025-02-08', '2025-02-09', '2025-02-10'], 
-      completed: false
-    }
-  ];
+export class HomepageComponent implements OnInit {
+  tasks: Task[] = [];
+  user !: User;
 
-  constructor(public dialog: MatDialog, private router: Router) {}
+  constructor(public dialog: MatDialog,
+    private router: Router,
+    private taskService: TaskService,
+    private userSubject: UserSubject) { }
+
+
+  ngOnInit(): void {
+    this.user = this.userSubject.getUser();
+    this.taskService.getTasksByUserId(this.user.uid).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.tasks = response.data; 
+      },
+      error: (response) => {
+        console.log(response);
+      },
+      complete: () => {
+        console.log('completed');
+      }
+    })
+  }
 
   openTaskDetails(task: Task): void {
     this.dialog.open(TaskDetailComponent, {

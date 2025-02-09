@@ -25,6 +25,7 @@
     "@angular/router": "^19.0.0",
     "@primeng/themes": "^19.0.5",
     "jest-editor-support": "*",
+    "ngx-cookie-service": "^19.1.0",
     "personaltimemanager.client": "file:",
     "primeicons": "^7.0.0",
     "primeng": "^19.0.5",
