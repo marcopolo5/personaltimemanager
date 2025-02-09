@@ -1,7 +1,7 @@
 using Google.Cloud.Firestore;
 
-[FirestoreData] 
-public class TaskEntity
+[FirestoreData]
+public class Task
 {
     [FirestoreProperty]
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -19,7 +19,7 @@ public class TaskEntity
     public string Type { get; set; }
 
     [FirestoreProperty]
-     public string? StartTime { get; set; }
+    public string? StartTime { get; set; }
 
     [FirestoreProperty]
     public string EndTime { get; set; }

@@ -24,7 +24,7 @@ public class TaskController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddTask(string userId, [FromBody] TaskEntity request)
+    public async Task<IActionResult> AddTask(string userId, [FromBody] Task request)
     {
         _logger.LogInformation("Adding a new task for user {UserId}: {@Request}", userId, request);
 
@@ -48,10 +48,10 @@ public class TaskController : ControllerBase
         Query query = _firestoreDb.Collection(CollectionName).WhereEqualTo("UserId", userId);
         QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
 
-        List<TaskEntity> tasks = new();
+        List<Task> tasks = new();
         foreach (DocumentSnapshot doc in querySnapshot.Documents)
         {
-            tasks.Add(doc.ConvertTo<TaskEntity>());
+            tasks.Add(doc.ConvertTo<Task>());
         }
 
         return Ok(new { message = "Tasks retrieved successfully.", data = tasks });
@@ -68,12 +68,12 @@ public class TaskController : ControllerBase
             return NotFound(new { message = "Task not found for this user." });
         }
 
-        TaskEntity task = snapshot.ConvertTo<TaskEntity>();
+        Task task = snapshot.ConvertTo<Task>();
         return Ok(new { message = "Task retrieved successfully.", data = task });
     }
 
     [HttpPut("{taskId}")]
-    public async Task<IActionResult> UpdateTask(string userId, string taskId, [FromBody] TaskEntity request)
+    public async Task<IActionResult> UpdateTask(string userId, string taskId, [FromBody] Task request)
     {
         DocumentReference docRef = _firestoreDb.Collection(CollectionName).Document(taskId);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();

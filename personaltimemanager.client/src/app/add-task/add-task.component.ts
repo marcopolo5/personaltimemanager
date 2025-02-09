@@ -4,6 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import { CommonModule } from '@angular/common';
+import { UserSubject } from '../subjects/user.subject';
+import { User } from '../models/User';
 
 @Component({
   selector: 'app-add-task',
@@ -15,7 +17,9 @@ import { CommonModule } from '@angular/common';
 export class AddTaskComponent implements OnInit {
   taskForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private taskService: TaskService) { }
+  user!: User;
+
+  constructor(private fb: FormBuilder, private router: Router, private taskService: TaskService, private userSubject: UserSubject) { }
 
   ngOnInit(): void {
     this.taskForm = this.fb.group({
@@ -27,6 +31,8 @@ export class AddTaskComponent implements OnInit {
       startTime: [''],
       endTime: ['', Validators.required],
     });
+    this.user = this.userSubject.getUser();
+    console.log(this.user);
   }
 
   onSubmit(): void {
@@ -42,14 +48,14 @@ export class AddTaskComponent implements OnInit {
       };
 
 
-      console.log('Task Submitted:', this.taskForm.value, data);
-      this.taskService.addTask('janos', data).subscribe({
+      console.log('Task Submitted:', this.taskForm.value, data, this.user);
+      this.taskService.addTask(this.user.uid, data).subscribe({
         next: (response) => {
-          //
+          console.log(response);
           this.router.navigate(['/home']);
         },
         error: (response) => {
-          //
+          console.log(response);
         },
         complete: () => {
           this.taskForm.reset();

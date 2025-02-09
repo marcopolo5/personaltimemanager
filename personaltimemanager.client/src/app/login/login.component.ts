@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
+import { UserSubject } from '../subjects/user.subject';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private userSubject: UserSubject) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -26,8 +27,9 @@ export class LoginComponent {
 
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          this.router.navigate(['/home']);
+          this.userSubject.setUser(response.user);
           console.log(response);
+          this.router.navigate(['/home']);
         },
         error: (response) => {
           console.log(response);
