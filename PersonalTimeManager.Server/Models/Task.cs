@@ -7,7 +7,7 @@ public class TaskEntity
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [FirestoreProperty]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     [FirestoreProperty]
     public string Name { get; set; }
@@ -19,10 +19,10 @@ public class TaskEntity
     public string Type { get; set; }
 
     [FirestoreProperty]
-    public DateTime StartTime { get; set; }
+     public string? StartTime { get; set; }
 
     [FirestoreProperty]
-    public DateTime EndTime { get; set; }
+    public string EndTime { get; set; }
 
     [FirestoreProperty]
     public List<string> Dates { get; set; }

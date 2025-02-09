@@ -40,7 +40,7 @@
         </div>
           <div class="form-buttons">
               <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
-              <button type="submit" class="btn-register" [disabled]="taskForm.invalid">Add Task</button>
+              <button type="submit" class="btn-register" [disabled]="taskForm.invalid || !isValidDateTimeRange()">Add Task</button>
           </div>
       </form>
   </div>

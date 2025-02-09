@@ -31,8 +31,19 @@ export class AddTaskComponent implements OnInit {
 
   onSubmit(): void {
     if (this.taskForm.valid) {
-      console.log('Task Submitted:', this.taskForm.value);
-      this.taskService.addTask(this.taskForm.value).subscribe({
+
+      const data = {
+        Name: this.taskForm.get('taskName')?.value,
+        Description: this.taskForm.get('description')?.value,
+        Type: this.taskForm.get('taskType')?.value,
+        StartTime: this.taskForm.get('startTime')?.value || null,
+        EndTime: this.taskForm.get('endTime')?.value || null,
+        Dates: this.generateDateList()
+      };
+
+
+      console.log('Task Submitted:', this.taskForm.value, data);
+      this.taskService.addTask('janos', data).subscribe({
         next: (response) => {
           //
           this.router.navigate(['/home']);
@@ -53,4 +64,64 @@ export class AddTaskComponent implements OnInit {
   cancel() {
     this.router.navigate(['/home']);
   }
+
+
+
+
+  generateDateList() {
+    const startDate = this.taskForm.get('startDate')?.value;
+    const endDate = this.taskForm.get('deadline')?.value;
+
+    if (!startDate) {
+      return [endDate]
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    if (start > end) {
+      return [];
+    }
+
+    const dateList: string[] = [];
+    let current = start;
+
+    while (current <= end) {
+      dateList.push(current.toISOString().split('T')[0]);
+      current.setDate(current.getDate() + 1);
+    }
+
+    return dateList;
+  }
+
+
+
+  isValidDateTimeRange(): boolean {
+
+    const startDate = this.taskForm.get('startDate')?.value;
+    const deadline = this.taskForm.get('deadline')?.value;
+    const startTime = this.taskForm.get('startTime')?.value;
+    const endTime = this.taskForm.get('endTime')?.value;
+
+    if (!startDate && !startTime && deadline && endTime) {
+      return true;
+    }
+
+    if (!startDate || !startTime || !deadline || !endTime) {
+      return false;
+    }
+
+    const startDateTime = this.combineDateTime(startDate, startTime);
+    const endDateTime = this.combineDateTime(deadline, endTime);
+
+    return startDateTime <= endDateTime;
+  }
+
+  combineDateTime(dateStr: string, timeStr: string): Date {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const [hours, minutes] = timeStr.split(':').map(Number);
+
+    return new Date(year, month - 1, day, hours, minutes, 0);
+  }
+
+
 }

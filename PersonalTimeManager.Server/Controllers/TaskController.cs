@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 [ApiController]
-[Route("api/Users/{userId}/tasks")]
+[Route("api/Users/{userId}/Tasks")]
 public class TaskController : ControllerBase
 {
     private readonly FirestoreDb _firestoreDb;
@@ -34,6 +34,8 @@ public class TaskController : ControllerBase
         }
 
         request.UserId = userId;
+        request.StartTime ??= "00:00";
+        request.EndTime ??= "00:00";
         DocumentReference docRef = await _firestoreDb.Collection(CollectionName).AddAsync(request);
         request.Id = docRef.Id;
 
