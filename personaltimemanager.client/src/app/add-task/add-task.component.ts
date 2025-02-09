@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import { CommonModule } from '@angular/common';
 import { UserSubject } from '../subjects/user.subject';
 import { User } from '../models/User';
+import { Task } from '../models/Task';
 
 @Component({
   selector: 'app-add-task',
@@ -15,56 +16,128 @@ import { User } from '../models/User';
   imports: [ReactiveFormsModule, CommonModule],
 })
 export class AddTaskComponent implements OnInit {
-  taskForm!: FormGroup;
+  DEFAULT_TASK: Task = {
+    id: '',
+    userId: '',
+    name: '',
+    description: '',
+    type: '',
+    startTime: '',
+    endTime: '',
+    dates: [],
+    completed: false
+  }
 
+  taskForm: FormGroup = new FormGroup({});
+  task: Task = { ...this.DEFAULT_TASK };
   user!: User;
 
-  constructor(private fb: FormBuilder, private router: Router, private taskService: TaskService, private userSubject: UserSubject) { }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private taskService: TaskService,
+    private userSubject: UserSubject) { }
 
   ngOnInit(): void {
-    this.taskForm = this.fb.group({
-      taskName: ['', Validators.required],
-      description: ['', Validators.required],
-      taskType: [''],
-      startDate: [''],
-      deadline: ['', Validators.required],
-      startTime: [''],
-      endTime: ['', Validators.required],
-    });
+    this.initForm();
     this.user = this.userSubject.getUser();
     console.log(this.user);
+    const taskId = this.route.snapshot.paramMap.get('taskId') || '';
+    if (taskId) {
+      this.getTask(taskId);
+    } else {
+
+    }
+  }
+
+  getTask(taskId: string) {
+    this.taskService.getTaskById(this.user.uid, taskId).subscribe({
+      next: (response) => {
+        this.task = response.data;
+        this.initForm();
+        console.log(response);
+      },
+      error: (response) => {
+        console.log(response);
+      },
+      complete: () => {
+        console.log('completed');
+        this.initForm();
+      },
+    });
+  }
+
+
+  initForm() {
+    this.taskForm = this.fb.group({
+      name: [this.task.name, Validators.required],
+      description: [this.task.description, Validators.required],
+      taskType: [this.task.type, Validators.required],
+      startDate: [this.task.dates[0]],
+      deadline: [this.task.dates.at(-1), Validators.required],
+      startTime: [this.task.startTime],
+      endTime: [this.task.endTime, Validators.required],
+    });
+
+    console.log(this.taskForm.value);
   }
 
   onSubmit(): void {
-    if (this.taskForm.valid) {
-
-      const data = {
-        Name: this.taskForm.get('taskName')?.value,
-        Description: this.taskForm.get('description')?.value,
-        Type: this.taskForm.get('taskType')?.value,
-        StartTime: this.taskForm.get('startTime')?.value || null,
-        EndTime: this.taskForm.get('endTime')?.value || null,
-        Dates: this.generateDateList()
-      };
-
-
-      console.log('Task Submitted:', this.taskForm.value, data, this.user);
-      this.taskService.addTask(this.user.uid, data).subscribe({
-        next: (response) => {
-          console.log(response);
-          this.router.navigate(['/home']);
-        },
-        error: (response) => {
-          console.log(response);
-        },
-        complete: () => {
-          this.taskForm.reset();
-          console.log('completed...');
-        }
-      });
-    } else {
+    if (!this.taskForm.valid) {
       console.log('Form is invalid');
+      return
     }
+    const data = {
+      Name: this.taskForm.get('name')?.value,
+      Description: this.taskForm.get('description')?.value,
+      Type: this.taskForm.get('taskType')?.value,
+      StartTime: this.taskForm.get('startTime')?.value || null,
+      EndTime: this.taskForm.get('endTime')?.value || null,
+      Dates: this.generateDateList()
+    };
+
+    console.log('Task Submitted:', this.taskForm.value, data, this.user);
+
+    if (this.task.id) {
+      this.updateTask(data);
+    } else {
+      this.addTask(data);
+    }
+
+  }
+
+
+  addTask(data: any) {
+    this.taskService.addTask(this.user.uid, data).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.router.navigate(['/home']);
+      },
+      error: (response) => {
+        console.log(response);
+      },
+      complete: () => {
+        this.taskForm.reset();
+        console.log('completed...');
+      }
+    });
+  }
+
+  updateTask(data: any) {
+    this.taskService.updateTask(this.user.uid, this.task.id, data).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.router.navigate(['/home']);
+      },
+      error: (response) => {
+        console.log(response);
+      },
+      complete: () => {
+        this.taskForm.reset();
+        console.log('completed...');
+      }
+    });
   }
 
   cancel() {

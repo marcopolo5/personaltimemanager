@@ -29,7 +29,7 @@ export class HomepageComponent implements OnInit {
     this.taskService.getTasksByUserId(this.user.uid).subscribe({
       next: (response) => {
         console.log(response);
-        this.tasks = response.data; 
+        this.tasks = response.data;
       },
       error: (response) => {
         console.log(response);
@@ -49,7 +49,7 @@ export class HomepageComponent implements OnInit {
 
   addTask(): void {
     console.log('Add Task Button Clicked!');
-    this.router.navigate(['add-task']);
+    this.router.navigate(['tasks/new']);
   }
 
   toggleTaskCompletion(task: Task): void {

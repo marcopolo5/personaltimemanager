@@ -13,7 +13,7 @@ export class TaskDetailComponent {
     public dialogRef: MatDialogRef<TaskDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public task: any,
     private router: Router
-  ) {}
+  ) { }
 
   close(): void {
     this.dialogRef.close();
@@ -23,8 +23,8 @@ export class TaskDetailComponent {
     console.log('Delete button clicked!');
   }
 
-  editTask(): void {
-    this.dialogRef.close(); // Close modal before navigating
-    this.router.navigate(['add-task'], { queryParams: { task: JSON.stringify(this.task) } });
+  editTask(taskId: string): void {
+    this.dialogRef.close();
+    this.router.navigate([`tasks/${taskId}/edit`]);
   }
 }

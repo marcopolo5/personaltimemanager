@@ -3,7 +3,7 @@ export interface Task {
   userId: string;
   name: string;
   description: string;
-  type: 'ongoing' | 'one-time';
+  type: 'ongoing' | 'one-time' | '';
   startTime: string;
   endTime: string;
   dates: string[];

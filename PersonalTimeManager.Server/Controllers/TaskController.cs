@@ -60,29 +60,36 @@ public class TaskController : ControllerBase
     [HttpGet("{taskId}")]
     public async Task<IActionResult> GetTaskById(string userId, string taskId)
     {
-        DocumentReference docRef = _firestoreDb.Collection(CollectionName).Document(taskId);
-        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+        Query query = _firestoreDb.Collection(CollectionName)
+            .WhereEqualTo("Id", taskId)
+            .WhereEqualTo("UserId", userId);
+        QuerySnapshot snapshot = await query.GetSnapshotAsync();
 
-        if (!snapshot.Exists || snapshot.GetValue<string>("UserId") != userId)
+        if (snapshot.Documents.Count == 0)
         {
-            return NotFound(new { message = "Task not found for this user." });
+            return NotFound(new { message = "Task not found." });
         }
 
-        Task task = snapshot.ConvertTo<Task>();
+        Task task = snapshot.Documents[0].ConvertTo<Task>();
+
         return Ok(new { message = "Task retrieved successfully.", data = task });
     }
+
 
     [HttpPut("{taskId}")]
     public async Task<IActionResult> UpdateTask(string userId, string taskId, [FromBody] Task request)
     {
-        DocumentReference docRef = _firestoreDb.Collection(CollectionName).Document(taskId);
-        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+        Query query = _firestoreDb.Collection(CollectionName)
+            .WhereEqualTo("Id", taskId)
+            .WhereEqualTo("UserId", userId);
+        QuerySnapshot snapshot = await query.GetSnapshotAsync();
 
-        if (!snapshot.Exists || snapshot.GetValue<string>("UserId") != userId)
+        if (snapshot.Documents.Count == 0)
         {
             return NotFound(new { message = "Task not found for this user." });
         }
 
+        DocumentReference docRef = snapshot.Documents[0].Reference;
         request.UserId = userId;
         await docRef.SetAsync(request, SetOptions.Overwrite);
 

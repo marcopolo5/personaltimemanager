@@ -1,10 +1,10 @@
 <div class="register-container">
   <div class="register-card">
-      <h2>Add Task</h2>
+      <h2>{{task.id ? 'Update Task #' + task.id : 'Add Task'}}</h2>
       <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
               <label for="task-name">Task Name</label>
-              <input type="text" id="task-name" class="form-control" formControlName="taskName" placeholder="Enter task name">
+              <input type="text" id="task-name" class="form-control" formControlName="name" placeholder="Enter task name">
           </div>
           <div class="form-group">
               <label for="description">Task Description</label>
@@ -40,7 +40,7 @@
         </div>
           <div class="form-buttons">
               <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
-              <button type="submit" class="btn-register" [disabled]="taskForm.invalid || !isValidDateTimeRange()">Add Task</button>
+              <button type="submit" class="btn-register" [disabled]="taskForm.invalid || !isValidDateTimeRange()">{{task.id ? 'Update Task' : 'Add Task'}}</button>
           </div>
       </form>
   </div>

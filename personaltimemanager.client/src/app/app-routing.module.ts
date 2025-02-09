@@ -8,7 +8,8 @@ import { HomepageComponent } from './homepage/homepage.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'add-task', component: AddTaskComponent},
+  { path: 'tasks/new', component: AddTaskComponent },
+  { path: 'tasks/:taskId/edit', component: AddTaskComponent },
   { path: 'home', component: HomepageComponent },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
