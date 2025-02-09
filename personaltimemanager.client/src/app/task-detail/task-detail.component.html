@@ -7,7 +7,7 @@
   <p><strong>Dates:</strong> {{ task.dates.join(', ') }}</p>
 
   <div class="modal-actions">
-    <button class="delete-btn" (click)="deleteTask()">Delete</button>
+    <button class="delete-btn" (click)="deleteTask(task)">Delete</button>
     <button class="edit-btn" (click)="editTask(task.id)">Edit</button>
     <button class="close-btn" (click)="close()">Close</button>
   </div>

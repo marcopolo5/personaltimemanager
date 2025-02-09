@@ -41,9 +41,16 @@ export class HomepageComponent implements OnInit {
   }
 
   openTaskDetails(task: Task): void {
-    this.dialog.open(TaskDetailComponent, {
+    const dialogRef = this.dialog.open(TaskDetailComponent, {
       width: '400px',
       data: task
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'deleted') {
+        console.log('Task deleted successfully!');
+        this.tasks = this.tasks.filter(t => t.id !== task.id);
+      }
     });
   }
 

@@ -34,8 +34,7 @@ public class TaskController : ControllerBase
         }
 
         request.UserId = userId;
-        request.StartTime ??= "00:00";
-        request.EndTime ??= "00:00";
+        request.StartTime ??= "--:--";
         DocumentReference docRef = await _firestoreDb.Collection(CollectionName).AddAsync(request);
         request.Id = docRef.Id;
 
@@ -99,14 +98,16 @@ public class TaskController : ControllerBase
     [HttpDelete("{taskId}")]
     public async Task<IActionResult> DeleteTask(string userId, string taskId)
     {
-        DocumentReference docRef = _firestoreDb.Collection(CollectionName).Document(taskId);
-        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+        Query query = _firestoreDb.Collection(CollectionName)
+            .WhereEqualTo("Id", taskId)
+            .WhereEqualTo("UserId", userId);
+        QuerySnapshot snapshot = await query.GetSnapshotAsync();
 
-        if (!snapshot.Exists || snapshot.GetValue<string>("UserId") != userId)
+        if (snapshot.Documents.Count == 0)
         {
             return NotFound(new { message = "Task not found for this user." });
         }
-
+        DocumentReference docRef = snapshot.Documents[0].Reference;
         await docRef.DeleteAsync();
         return StatusCode(204);
     }
