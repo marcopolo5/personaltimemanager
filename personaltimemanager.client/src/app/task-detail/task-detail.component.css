@@ -34,4 +34,20 @@
   .close-btn:hover {
     opacity: 0.8;
   }
+
+  .edit-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+    opacity: 0.8;
+}
+
   
