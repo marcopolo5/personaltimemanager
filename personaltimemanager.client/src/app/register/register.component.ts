@@ -14,6 +14,8 @@ import { UserSubject } from '../subjects/user.subject';
 export class RegisterComponent {
 
   registerForm: FormGroup;
+  errorMessage = '';
+  successMessage = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private userSubject: UserSubject) {
     this.registerForm = this.fb.group({
@@ -25,23 +27,30 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
     if (this.registerForm.valid) {
       console.log(this.registerForm.value);
 
       this.authService.register(this.registerForm.value).subscribe({
         next: (response) => {
           this.userSubject.setUser(response.user);
+          this.successMessage = response.message;
           console.log(response);
           this.router.navigate(['/home']);
         },
         error: (response) => {
+          this.errorMessage = response.error.message;
           console.log(response);
         },
         complete: () => {
           console.log('completed');
         }
-      })
-
+      });
     }
+  }
+
+  passwordsMatch() {
+    return this.registerForm.get('password')?.value === this.registerForm.get('confirmPassword')?.value;
   }
 }

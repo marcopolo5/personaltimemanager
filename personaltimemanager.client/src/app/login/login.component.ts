@@ -13,15 +13,19 @@ import { UserSubject } from '../subjects/user.subject';
 export class LoginComponent {
 
   loginForm: FormGroup;
+  errorMessage = '';
+  successMessage = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private userSubject: UserSubject) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required]]
     });
   }
 
   onSubmit(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
 
@@ -29,10 +33,12 @@ export class LoginComponent {
         next: (response) => {
           this.userSubject.setUser(response.user);
           console.log(response);
+          this.successMessage = response.message;
           this.router.navigate(['/home']);
         },
         error: (response) => {
           console.log(response);
+          this.errorMessage = response.error.message;
         },
         complete: () => {
           console.log('completed');

@@ -16,13 +16,21 @@
         <label for="password">Password</label>
         <input type="password" id="password" class="form-control"
           formControlName="password" placeholder="Enter your password">
+        <p class="error--text"
+          *ngIf="registerForm.get('password')?.value.length > 0 && this.registerForm.get('password')?.invalid">Password
+          must be at least 6 characters long.</p>
       </div>
       <div class="form-group">
         <label for="confirm-password">Confirm Password</label>
         <input type="password" id="confirm-password" class="form-control"
           formControlName="confirmPassword" placeholder="Confirm your password">
+        <p class="error--text"
+          *ngIf="registerForm.get('confirmPassword')?.value.length > 0 && !passwordsMatch()">
+          Passwords do not match.
+        </p>
       </div>
-      <button type="submit" class="btn-register">Register</button>
+      <button type="submit" class="btn-register"
+        [disabled]="registerForm.invalid || !passwordsMatch()">Register</button>
     </form>
     <p class="already-registered">
       Already have an account? <a routerLink="/login" class="login-link">Click
