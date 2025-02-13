@@ -1,10 +1,11 @@
-using FirebaseAdmin.Auth;
+﻿using FirebaseAdmin.Auth;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore.V1;
 using System.Text.RegularExpressions;
 using PersonalTimeManager.Server.Models;
+using System.Net.Http;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -13,14 +14,26 @@ public class AuthController : ControllerBase
     private readonly FirebaseAuth _auth;
     private readonly FirestoreDb _firestoreDb;
     private readonly ILogger<AuthController> _logger;
+    private readonly string _firebaseApiKey;
+    private readonly HttpClient _httpClient;
 
-    public AuthController(ILogger<AuthController> logger)
+    public AuthController(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<AuthController> logger)
     {
-        _auth = FirebaseAuth.DefaultInstance;
+        _firebaseApiKey = configuration["Firebase:ApiKey"];
+
+        if (string.IsNullOrEmpty(_firebaseApiKey))
+        {
+            throw new Exception("Firebase API Key is missing in appsettings.json!");
+        }
+
+        _httpClient = httpClientFactory.CreateClient();
+
         _firestoreDb = FirestoreDb.Create("personaltimemanager", new FirestoreClientBuilder
         {
             Credential = GoogleCredential.FromFile("Keys/serviceAccountKey.json")
         }.Build());
+
+        _auth = FirebaseAuth.DefaultInstance;
         _logger = logger;
     }
 
@@ -108,34 +121,68 @@ public class AuthController : ControllerBase
 
         try
         {
-            _logger.LogInformation("Fetching user from Firebase by email: {Email}", request.Email);
-            var user = await _auth.GetUserByEmailAsync(request.Email);
-            _logger.LogInformation("User fetched from Firebase: {Uid}", user.Uid);
+            var firebaseApiKey = _firebaseApiKey;
+            var client = _httpClient;
 
-            _logger.LogInformation("Validating user exists in Firestore...");
-            var docSnapshot = await _firestoreDb.Collection("users").Document(user.Uid).GetSnapshotAsync();
-            if (!docSnapshot.Exists)
+            var payload = new
             {
-                _logger.LogWarning("User not found in Firestore: {Uid}", user.Uid);
-                return Unauthorized(new { message = "User not found." });
+                email = request.Email,
+                password = request.Password,
+                returnSecureToken = true
+            };
+
+            var response = await client.PostAsJsonAsync(
+                $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={firebaseApiKey}",
+                payload
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("Invalid credentials for email: {Email}", request.Email);
+                return Unauthorized(new { message = "Invalid email or password." });
             }
 
-            _logger.LogInformation("Generating custom Firebase token...");
-            var token = await _auth.CreateCustomTokenAsync(user.Uid);
-            _logger.LogInformation("Token generated successfully: {Token}", token);
+            var result = await response.Content.ReadFromJsonAsync<Dictionary<string, object>>();
+
+            if (result == null)
+            {
+                _logger.LogWarning("Error deserializing Firebase response.");
+                return StatusCode(500, new { message = "Error deserializing Firebase response." });
+            }
+
+            string idToken = result.ContainsKey("idToken") ? result["idToken"].ToString() : null;
+            string userId = result.ContainsKey("localId") ? result["localId"].ToString() : null;
+
+            if (string.IsNullOrEmpty(idToken) || string.IsNullOrEmpty(userId))
+            {
+                _logger.LogWarning("Missing required fields in Firebase response.");
+                return Unauthorized(new { message = "Invalid response from Firebase." });
+            }
+
+            var docSnapshot = await _firestoreDb.Collection("users").Document(userId).GetSnapshotAsync();
+            if (!docSnapshot.Exists)
+            {
+                _logger.LogWarning("User not found in Firestore: {Uid}", userId);
+                return Unauthorized(new { message = "User not found." });
+            }
 
             return Ok(new
             {
                 message = "Login successful.",
-                token,
+                token = idToken,
                 user = new
                 {
-                    uid = user.Uid,
+                    uid = userId,
                     name = docSnapshot.GetValue<string>("name"),
                     email = docSnapshot.GetValue<string>("email"),
                     created_at = docSnapshot.GetValue<Timestamp>("created_at").ToDateTime()
                 }
             });
+        }
+        catch (HttpRequestException httpEx)
+        {
+            _logger.LogError(httpEx, "Error during HTTP request.");
+            return StatusCode(500, new { message = "Network error occurred during login." });
         }
         catch (Exception ex)
         {
