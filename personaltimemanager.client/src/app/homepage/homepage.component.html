@@ -21,5 +21,7 @@
 
   <div class="button-container">
     <button pButton label="Add Task" icon="pi pi-plus" class="add-btn" (click)="addTask()"></button>
-    <button pButton label="Calendar" icon="pi pi-calendar" class="calendar-btn" (click)="openCalendar()"></button>
+    <!-- <button pButton label="Calendar" icon="pi pi-calendar" class="calendar-btn" (click)="openCalendar()"></button> -->
+    <h2>Select a Date</h2>
+    <input type="date" [(ngModel)]="selectedDate" (change)="onDateChange()" class="form-control">
 </div>
