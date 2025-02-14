@@ -42,10 +42,16 @@ public class AuthController : ControllerBase
     {
         _logger.LogInformation("Register endpoint called with data: {@Request}", request);
 
-        if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+        if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password) || string.IsNullOrEmpty(request.ConfirmPassword))
         {
             _logger.LogWarning("Missing required fields in Register request.");
-            return BadRequest(new { message = "Name, Email, and Password are required." });
+            return BadRequest(new { message = "Name, Email, Password, and ConfirmPassword are required." });
+        }
+
+        if (request.Password != request.ConfirmPassword)
+        {
+            _logger.LogWarning("Passwords do not match.");
+            return BadRequest(new { message = "Password and Confirm Password must match." });
         }
 
         if (!Regex.IsMatch(request.Email, @"^[^\s@]+@[^\s@]+\.[^\s@]+$"))
@@ -62,6 +68,17 @@ public class AuthController : ControllerBase
 
         try
         {
+            _logger.LogInformation("Checking if email already exists in Firestore...");
+            var querySnapshot = await _firestoreDb.Collection("users")
+                .WhereEqualTo("email", request.Email)
+                .GetSnapshotAsync();
+
+            if (querySnapshot.Count > 0)
+            {
+                _logger.LogWarning("Email already in use: {Email}", request.Email);
+                return BadRequest(new { message = "Email already in use." });
+            }
+
             _logger.LogInformation("Creating user in Firebase Authentication...");
             var userRecordArgs = new UserRecordArgs
             {
@@ -75,12 +92,12 @@ public class AuthController : ControllerBase
 
             _logger.LogInformation("Saving user to Firestore...");
             var userDocument = new Dictionary<string, object>
-            {
-                { "uid", userRecord.Uid },
-                { "name", request.Name },
-                { "email", request.Email },
-                { "created_at", Timestamp.GetCurrentTimestamp() }
-            };
+        {
+            { "uid", userRecord.Uid },
+            { "name", request.Name },
+            { "email", request.Email },
+            { "created_at", Timestamp.GetCurrentTimestamp() }
+        };
 
             await _firestoreDb.Collection("users").Document(userRecord.Uid).SetAsync(userDocument);
             _logger.LogInformation("User saved to Firestore successfully.");
