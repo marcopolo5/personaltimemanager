@@ -20,14 +20,14 @@ import { User } from '../models/User';
 export class CalendarDialogComponent {
   selectedDate: string = new Date().toISOString().split("T")[0];
   tasks: Task[] = [];
-  user!: User; 
+  user!: User;
 
-  constructor(public dialog: MatDialog, private taskService: TaskService, private userSubject: UserSubject, 
+  constructor(public dialog: MatDialog, private taskService: TaskService, private userSubject: UserSubject,
     public dialogRef: MatDialogRef<CalendarDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public task: any) {}
 
   ngOnInit(): void {
-    this.user = this.userSubject.getUser(); 
+    this.user = this.userSubject.getUser();
   }
 
   close(): void {
@@ -35,8 +35,8 @@ export class CalendarDialogComponent {
   }
 
   onDateChange(): void {
-    
-    this.taskService.getTasksByDate(this.user.uid, this.selectedDate).subscribe({
+
+    this.taskService.getTasksByUserIdAndDate(this.user.uid, this.selectedDate).subscribe({
       next: (response: { data: Task[] }) => {
         this.tasks = response.data;
         this.close();

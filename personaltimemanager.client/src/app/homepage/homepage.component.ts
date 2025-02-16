@@ -7,6 +7,9 @@ import { Task } from '../models/Task';
 import { TaskService } from '../services/task.service';
 import { UserSubject } from '../subjects/user.subject';
 import { User } from '../models/User';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CustomResponse } from '../models/CustomResponse';
+import { finalize } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -18,7 +21,8 @@ export class HomepageComponent implements OnInit {
   tasks: Task[] = [];
   user!: User;
   selectedDate: string = new Date().toISOString().split("T")[0];
-  
+  loadingText = '';
+
   constructor(public dialog: MatDialog,
     private router: Router,
     private taskService: TaskService,
@@ -26,18 +30,32 @@ export class HomepageComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.userSubject.getUser();
-    this.taskService.getTasksByUserId(this.user.uid).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.tasks = response.data;
-      },
-      error: (response) => {
-        console.log(response);
-      },
-      complete: () => {
-        console.log('completed');
-      }
-    })
+    if (!this.user) {
+      this.router.navigate(['/login']);
+    }
+    this.retrieveTasks();
+  }
+
+  retrieveTasks() {
+    this.tasks = [];
+    this.loadingText = 'Retrieving tasks...';
+    this.taskService.getTasksByUserIdAndDate(this.user.uid, this.selectedDate)
+      .pipe(finalize(() => {
+        this.loadingText = '';
+      }))
+      .subscribe({
+        next: (response: CustomResponse) => {
+          console.log(response);
+          this.tasks = response.data;
+        },
+        error: (response: HttpErrorResponse) => {
+          console.log(response);
+          this.tasks = [];
+        },
+        complete: () => {
+          console.log('completed');
+        }
+      });
   }
 
   openTaskDetails(task: Task): void {
@@ -59,17 +77,10 @@ export class HomepageComponent implements OnInit {
       width: '500px'
     });
   }
-  
+
   onDateChange(): void {
-    
-    this.taskService.getTasksByDate(this.user.uid, this.selectedDate).subscribe({
-      next: (response: { data: Task[] }) => {
-        this.tasks = response.data;
-      },
-      error: (error: any) => {
-        console.log('Error fetching tasks:', error);
-      }
-    });
+    console.log('date changed');
+    this.retrieveTasks();
   }
 
   addTask(): void {

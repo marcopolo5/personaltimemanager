@@ -21,10 +21,9 @@ export class TaskService {
     return this.http.get<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks/${taskId}`);
   }
 
-  getTasksByDate(userId: string, date: string): Observable<CustomResponse> {
-    return this.http.get<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks/ByDate/${date}`);
+  getTasksByUserIdAndDate(userId: string, date: string): Observable<CustomResponse> {
+    return this.http.get<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks/Date/${date}`);
   }
-   
 
   addTask(userId: string, data: any): Observable<CustomResponse> {
     return this.http.post<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks`, data);

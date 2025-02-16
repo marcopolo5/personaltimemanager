@@ -59,7 +59,7 @@ public class TaskController : ControllerBase
         return Ok(new { message = "Tasks retrieved successfully.", data = tasks });
     }
 
-    [HttpGet("date/{date}")]
+    [HttpGet("Date/{date}")]
     public async Task<IActionResult> GetTasksByDate(string userId, string date)
     {
         if (!DateTime.TryParse(date, out DateTime parsedDate))
