@@ -125,6 +125,7 @@ public class TaskController : ControllerBase
 
         DocumentReference docRef = snapshot.Documents[0].Reference;
         request.UserId = userId;
+        request.StartTime ??= "--:--";
         await docRef.SetAsync(request, SetOptions.Overwrite);
 
         return Ok(new { message = "Task updated successfully.", data = request });
