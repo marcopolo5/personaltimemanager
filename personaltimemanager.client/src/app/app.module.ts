@@ -11,10 +11,15 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
+// PrimeNG Modules
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { CalendarModule } from 'primeng/calendar';
+
+// Calendar Dialog Component
+import { CalendarDialogComponent } from './calendar/calendar-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,13 +33,14 @@ import { DialogModule } from 'primeng/dialog';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,
     ReactiveFormsModule,
+    HttpClientModule,
     AddTaskComponent,
     CardModule,
     CheckboxModule,
     ButtonModule,
-    DialogModule
+    DialogModule,
+    CalendarModule 
   ],
   providers: [
     provideAnimationsAsync()

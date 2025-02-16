@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
+import { CalendarDialogComponent } from '../calendar/calendar-dialog.component';
 import { Router } from '@angular/router';
 import { Task } from '../models/Task';
 import { TaskService } from '../services/task.service';
 import { UserSubject } from '../subjects/user.subject';
 import { User } from '../models/User';
-
 
 @Component({
   standalone: false,
@@ -16,13 +16,12 @@ import { User } from '../models/User';
 })
 export class HomepageComponent implements OnInit {
   tasks: Task[] = [];
-  user !: User;
+  user!: User;
 
   constructor(public dialog: MatDialog,
     private router: Router,
     private taskService: TaskService,
     private userSubject: UserSubject) { }
-
 
   ngOnInit(): void {
     this.user = this.userSubject.getUser();
@@ -53,6 +52,13 @@ export class HomepageComponent implements OnInit {
       }
     });
   }
+
+  openCalendar(): void {
+    this.dialog.open(CalendarDialogComponent, {
+      width: '500px'
+    });
+  }
+  
 
   addTask(): void {
     console.log('Add Task Button Clicked!');

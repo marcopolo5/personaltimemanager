@@ -21,6 +21,11 @@ export class TaskService {
     return this.http.get<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks/${taskId}`);
   }
 
+  getTasksByDate(userId: string, date: string): Observable<CustomResponse> {
+    return this.http.get<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks/ByDate/${date}`);
+  }
+   
+
   addTask(userId: string, data: any): Observable<CustomResponse> {
     return this.http.post<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks`, data);
   }
