@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Google.Cloud.Firestore;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore.V1;
@@ -35,11 +35,14 @@ public class TaskController : ControllerBase
 
         request.UserId = userId;
         request.StartTime ??= "--:--";
+
         DocumentReference docRef = await _firestoreDb.Collection(CollectionName).AddAsync(request);
+
         request.Id = docRef.Id;
 
         return StatusCode(201, new { message = "Task added successfully.", data = request });
     }
+
 
     [HttpGet]
     public async Task<IActionResult> GetUserTasks(string userId)
@@ -55,6 +58,38 @@ public class TaskController : ControllerBase
 
         return Ok(new { message = "Tasks retrieved successfully.", data = tasks });
     }
+
+    [HttpGet("date/{date}")]
+    public async Task<IActionResult> GetTasksByDate(string userId, string date)
+    {
+        if (!DateTime.TryParse(date, out DateTime parsedDate))
+        {
+            _logger.LogWarning("Invalid date format: {Date}", date);
+            return BadRequest(new { message = "Invalid date format. Please provide a valid date in the format YYYY-MM-DD." });
+        }
+
+        string formattedDate = parsedDate.ToString("yyyy-MM-dd");
+
+        Query query = _firestoreDb.Collection(CollectionName)
+            .WhereEqualTo("UserId", userId)
+            .WhereArrayContains("Dates", formattedDate); 
+
+        QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
+
+        List<Task> tasks = new();
+        foreach (DocumentSnapshot doc in querySnapshot.Documents)
+        {
+            tasks.Add(doc.ConvertTo<Task>());
+        }
+
+        if (tasks.Count == 0)
+        {
+            return NotFound(new { message = "No tasks found for the specified date." });
+        }
+
+        return Ok(new { message = "Tasks retrieved successfully.", data = tasks });
+    }
+
 
     [HttpGet("{taskId}")]
     public async Task<IActionResult> GetTaskById(string userId, string taskId)
