@@ -72,6 +72,10 @@ body {
   background-color: #218838;
 }
 
+.btn-login:disabled {
+  background-color: #ccc;
+}
+
 .not-registered {
   margin-top: 15px;
   font-size: 14px;

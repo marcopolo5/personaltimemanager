@@ -1,6 +1,7 @@
 <div class="register-container">
   <div class="register-card">
     <h2>Register</h2>
+    <p class="text--error" *ngIf="errorMessage">{{errorMessage}}</p>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="name">Name</label>
@@ -16,13 +17,27 @@
         <label for="password">Password</label>
         <input type="password" id="password" class="form-control"
           formControlName="password" placeholder="Enter your password">
+        <div class="text--error"
+          *ngIf="!validatePassword() && this.registerForm.get('password')?.value.length">
+          <p>Password must contain:</p>
+          <ul>
+            <li>at least 8 characters</li>
+            <li>1 small letter</li>
+            <li>1 capital letter</li>
+            <li>1 number</li>
+            <li>1 special character</li>
+          </ul>
+        </div>
       </div>
       <div class="form-group">
         <label for="confirm-password">Confirm Password</label>
         <input type="password" id="confirm-password" class="form-control"
           formControlName="confirmPassword" placeholder="Confirm your password">
+        <p class="text--error" *ngIf="!passwordsMatch() && registerForm.get('confirmPassword')?.value.length">Passwords do not
+          match</p>
       </div>
-      <button type="submit" class="btn-register">Register</button>
+      <button type="submit" class="btn-register"
+        [disabled]="isBtnDisabled()">Register</button>
     </form>
     <p class="already-registered">
       Already have an account? <a routerLink="/login" class="login-link">Click

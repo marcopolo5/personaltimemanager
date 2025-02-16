@@ -1,6 +1,7 @@
 <div class="login-container">
   <div class="login-card">
     <h2>Login</h2>
+    <p class="text--error" *ngIf="errorMessage">{{errorMessage}}</p>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="email">Email</label>
@@ -20,7 +21,7 @@
           formControlName="password"
           placeholder="Enter your password" />
       </div>
-      <button type="submit" class="btn-login">Login</button>
+      <button type="submit" class="btn-login" [disabled]="loginForm.invalid">Login</button>
     </form>
     <p class="not-registered">
       Not registered yet? <a class="register-link" routerLink="/register">Click
