@@ -16,6 +16,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage = '';
   loginBtnText = 'Login';
+  showPassword = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private userSubject: UserSubject) {
     this.loginForm = this.fb.group({
@@ -48,5 +49,9 @@ export class LoginComponent {
       })
 
     }
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }

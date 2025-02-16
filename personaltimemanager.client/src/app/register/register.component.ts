@@ -17,6 +17,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   errorMessage = '';
   registerBtnText = 'Register';
+  showPassword = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private userSubject: UserSubject) {
     this.registerForm = this.fb.group({
@@ -71,5 +72,9 @@ export class RegisterComponent {
 
   isBtnDisabled() {
     return this.registerForm.invalid || !this.passwordsMatch() || !this.validatePassword();
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }
