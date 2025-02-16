@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
@@ -18,34 +18,33 @@ import { User } from '../models/User';
   styleUrls: ['./calendar-dialog.component.css']
 })
 export class CalendarDialogComponent {
-  selectedDate: string = '';
+  selectedDate: string = new Date().toISOString().split("T")[0];
   tasks: Task[] = [];
-  user!: User; // ✅ Added user object
+  user!: User; 
 
-  constructor(public dialog: MatDialog, private taskService: TaskService, private userSubject: UserSubject) {}
+  constructor(public dialog: MatDialog, private taskService: TaskService, private userSubject: UserSubject, 
+    public dialogRef: MatDialogRef<CalendarDialogComponent>,
+      @Inject(MAT_DIALOG_DATA) public task: any) {}
 
   ngOnInit(): void {
-    this.user = this.userSubject.getUser(); // ✅ Get the logged-in user
+    this.user = this.userSubject.getUser(); 
   }
 
-  fetchTasks(): void {
-    if (!this.selectedDate || !this.user?.uid) return;
-  
+  close(): void {
+    this.dialogRef.close();
+  }
+
+  onDateChange(): void {
+    
     this.taskService.getTasksByDate(this.user.uid, this.selectedDate).subscribe({
       next: (response: { data: Task[] }) => {
         this.tasks = response.data;
+        this.close();
       },
       error: (error: any) => {
         console.log('Error fetching tasks:', error);
+        this.close();
       }
-    });
-  }
-  
-
-  openTaskDetails(task: Task): void {
-    this.dialog.open(TaskDetailComponent, {
-      width: '400px',
-      data: task
     });
   }
 }

@@ -17,7 +17,8 @@ import { User } from '../models/User';
 export class HomepageComponent implements OnInit {
   tasks: Task[] = [];
   user!: User;
-
+  selectedDate: string = new Date().toISOString().split("T")[0];
+  
   constructor(public dialog: MatDialog,
     private router: Router,
     private taskService: TaskService,
@@ -59,6 +60,17 @@ export class HomepageComponent implements OnInit {
     });
   }
   
+  onDateChange(): void {
+    
+    this.taskService.getTasksByDate(this.user.uid, this.selectedDate).subscribe({
+      next: (response: { data: Task[] }) => {
+        this.tasks = response.data;
+      },
+      error: (error: any) => {
+        console.log('Error fetching tasks:', error);
+      }
+    });
+  }
 
   addTask(): void {
     console.log('Add Task Button Clicked!');
