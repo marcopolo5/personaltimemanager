@@ -14,7 +14,7 @@ FirebaseApp.Create(new AppOptions
 {
     Credential = GoogleCredential.FromFile("Keys/serviceAccountKey.json")
 });
-Console.WriteLine("Firebase initialized successfully.");
+Console.WriteLine("✅ Firebase initialized successfully.");
 
 builder.Services.AddCors(options =>
 {
@@ -26,8 +26,6 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
-
-builder.Services.AddHttpClient();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -42,6 +40,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true
         };
     });
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -58,10 +58,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 app.MapFallbackToFile("/index.html");
 app.UseStaticFiles();
 

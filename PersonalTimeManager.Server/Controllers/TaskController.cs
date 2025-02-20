@@ -5,6 +5,7 @@ using Google.Cloud.Firestore.V1;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/Users/{userId}/Tasks")]
@@ -24,7 +25,7 @@ public class TaskController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddTask(string userId, [FromBody] Task request)
+    public async Task<IActionResult> AddTask(string userId, [FromBody] TaskEntity request)
     {
         _logger.LogInformation("Adding a new task for user {UserId}: {@Request}", userId, request);
 
@@ -50,10 +51,10 @@ public class TaskController : ControllerBase
         Query query = _firestoreDb.Collection(CollectionName).WhereEqualTo("UserId", userId);
         QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
 
-        List<Task> tasks = new();
+        List<TaskEntity> tasks = new();
         foreach (DocumentSnapshot doc in querySnapshot.Documents)
         {
-            tasks.Add(doc.ConvertTo<Task>());
+            tasks.Add(doc.ConvertTo<TaskEntity>());
         }
 
         return Ok(new { message = "Tasks retrieved successfully.", data = tasks });
@@ -72,14 +73,14 @@ public class TaskController : ControllerBase
 
         Query query = _firestoreDb.Collection(CollectionName)
             .WhereEqualTo("UserId", userId)
-            .WhereArrayContains("Dates", formattedDate); 
+            .WhereArrayContains("Dates", formattedDate);
 
         QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
 
-        List<Task> tasks = new();
+        List<TaskEntity> tasks = new();
         foreach (DocumentSnapshot doc in querySnapshot.Documents)
         {
-            tasks.Add(doc.ConvertTo<Task>());
+            tasks.Add(doc.ConvertTo<TaskEntity>());
         }
 
         if (tasks.Count == 0)
@@ -104,14 +105,14 @@ public class TaskController : ControllerBase
             return NotFound(new { message = "Task not found." });
         }
 
-        Task task = snapshot.Documents[0].ConvertTo<Task>();
+        TaskEntity task = snapshot.Documents[0].ConvertTo<TaskEntity>();
 
         return Ok(new { message = "Task retrieved successfully.", data = task });
     }
 
 
     [HttpPut("{taskId}")]
-    public async Task<IActionResult> UpdateTask(string userId, string taskId, [FromBody] Task request)
+    public async Task<IActionResult> UpdateTask(string userId, string taskId, [FromBody] TaskEntity request)
     {
         Query query = _firestoreDb.Collection(CollectionName)
             .WhereEqualTo("Id", taskId)

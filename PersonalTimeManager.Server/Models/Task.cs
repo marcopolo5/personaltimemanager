@@ -1,7 +1,7 @@
 using Google.Cloud.Firestore;
 
 [FirestoreData]
-public class Task
+public class TaskEntity
 {
     [FirestoreProperty]
     public string Id { get; set; } = Guid.NewGuid().ToString();
