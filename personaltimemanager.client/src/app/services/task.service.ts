@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CustomResponse } from '../models/CustomResponse';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 export class TaskService {
 
   apiUrl = environment.apiUrl;
+
 
   constructor(private http: HttpClient) { }
 
