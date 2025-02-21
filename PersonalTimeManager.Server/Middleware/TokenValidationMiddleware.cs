@@ -16,7 +16,7 @@ public class TokenValidationMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        var path = context.Request.Path.Value.ToLower();
+        var path = context.Request.Path.Value;
 
         if (path.StartsWith("/api/Users/"))
         {
@@ -47,6 +47,7 @@ public class TokenValidationMiddleware
             }
 
             string tokenUserId = GetUserIdFromToken(token);
+
             if (string.IsNullOrEmpty(tokenUserId) || tokenUserId != requestedUserId)
             {
                 context.Response.StatusCode = 403;
@@ -57,7 +58,6 @@ public class TokenValidationMiddleware
 
         await _next(context);
     }
-
     private string GetUserIdFromToken(string token)
     {
         try
