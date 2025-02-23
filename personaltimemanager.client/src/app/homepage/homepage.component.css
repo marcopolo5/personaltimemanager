@@ -1,12 +1,12 @@
 .container {
   text-align: center;
   padding: 20px;
-  background-color: #ffffff; 
+  background-color: #ffffff;
   min-height: 100vh;
 }
 
 h2 {
-  color: #28a745; 
+  color: #28a745;
 }
 
 .task-list {
@@ -18,7 +18,7 @@ h2 {
 
 .task-card {
   width: 50%;
-  background: #ffffff; 
+  background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
   transition: transform 0.2s;
@@ -57,7 +57,7 @@ h2 {
 }
 
 .complete-btn.completed {
-  background-color: gray; 
+  background-color: gray;
   color: white;
 }
 
@@ -74,11 +74,14 @@ h3 {
   color: #28a745;
 }
 
-.button-container {
+.action__container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
+  flex-wrap: wrap;
+  width:300px;
+  height:50px;
+  margin:auto;
 }
 
 .calendar-btn {
@@ -98,8 +101,7 @@ h3 {
   opacity: 0.8;
 }
 
-.add-btn {
-  display: block;
+.button {
   width: 10%;
   padding: 10px;
   background-color: #28a745;
@@ -107,8 +109,46 @@ h3 {
   font-size: 16px;
   font-weight: bold;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin: 40px auto 0; /* Moves the button lower and centers it */
+  width:50%;
+  max-width: 200px;
+}
+
+
+
+.home__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.button--right {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.button--left {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+
+input[type="date"] {
+  width:50%;
+  height:30px;
+  border:none;
+}
+
+.action__container input, .action__container p  {
+  padding:0;
+  width:45%;
+  height:50px;
+  text-align: center;
+  vertical-align: baseline;
+}
+
+.action__container input  {
+  margin:0 5px 0 0;
 }

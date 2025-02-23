@@ -1,46 +1,58 @@
-<div class="container">
-  <h2 *ngIf="showTasksByDate">Tasks for {{selectedDate | date: 'dd MMM. yyyy'}}</h2>
-  <h2 *ngIf="!showTasksByDate">All Tasks</h2>
-
-  <div *ngIf="!tasks.length && !loadingText">
-    <h3>No tasks were found.</h3>
-  </div>
-  <div *ngIf="loadingText">
-    <h3>{{loadingText}}</h3>
-  </div>
-
-  <div class="task-list" *ngIf="tasks.length">
-    <p-card *ngFor="let task of tasks" class="task-card">
-      <div class="task-header">
-        <div class="task-content" (click)="openTaskDetails(task)">
-          <h3 [ngClass]="{'completed-text': task.completed}">{{ task.name}}
-          </h3>
-          <p>
-            <span *ngIf="task.startTime && task.startTime !== '--:--' ">
-              <strong>From </strong>
-              {{task.dates[0] | date: 'dd MMM. yyyy'}}, {{task.startTime }}
-            </span>
-            <p>
-              <strong>Until </strong>
-              {{task.dates.at(-1) | date: 'dd MMM. yyyy'}} {{ task.endTime }}
-            </p>
-          </div>
-          <button class="complete-btn" [class.completed]="task.completed"
-            (click)="task.completed = !task.completed">
-            {{ task.completed ? "Undo" : "Complete" }}
-          </button>
+<div class="container home">
+    <div class="home__header">
+        <div class="action__container">
+            <button pButton class="button button--left"
+                (click)="changeTaskView()">
+                {{ showTasksByDate ? "View all" : "View by date" }}
+            </button>
+            <button pButton label="Add Task" icon="pi pi-plus"
+                class="button button--right"
+                (click)="addTask()"></button>
         </div>
-      </p-card>
+        <div *ngIf="showTasksByDate" class="action__container">
+            <p>Select a Date: </p>
+            <input type="date" id="select-date" [(ngModel)]="selectedDate"
+                (change)="onDateChange()"
+                class="form-control">
+        </div>
+
+        <div class="home__header__title">
+            <h2 *ngIf="showTasksByDate">
+                Tasks for {{selectedDate | date: 'dd MMM. yyyy'}}
+            </h2>
+            <h2 *ngIf="!showTasksByDate">All Tasks</h2>
+        </div>
     </div>
 
-    <div class="button-container">
-      <button (click)="changeTaskView()">{{ showTasksByDate ? "View all" : "View by date" }}</button>
-      <button pButton label="Add Task" icon="pi pi-plus" class="add-btn"
-        (click)="addTask()"></button>
-      <!-- <button pButton label="Calendar" icon="pi pi-calendar" class="calendar-btn" (click)="openCalendar()"></button> -->
-      <div *ngIf="showTasksByDate">
-        <h2>Select a Date</h2>
-        <input type="date" [(ngModel)]="selectedDate" (change)="onDateChange()"
-        class="form-control">
-      </div>
+    <div *ngIf="!tasks.length && !loadingText">
+        <h3>No tasks were found.</h3>
     </div>
+    <div *ngIf="loadingText">
+        <h3>{{loadingText}}</h3>
+    </div>
+
+    <div class="task-list" *ngIf="tasks.length">
+        <p-card *ngFor="let task of tasks" class="task-card">
+            <div class="task-header">
+                <div class="task-content" (click)="openTaskDetails(task)">
+                    <h3 [ngClass]="{'completed-text': task.completed}">
+                        {{ task.name}}
+                    </h3>
+                    <p>
+                        <span
+                            *ngIf="task.startTime && task.startTime !== '--:--' ">
+                            <strong>From </strong>
+                            {{task.dates[0] | date: 'dd MMM. yyyy'}},
+                            {{task.startTime }}
+                        </span>
+                    </p>
+                    <p>
+                        <strong>Until </strong>
+                        {{task.dates.at(-1) | date: 'dd MMM. yyyy'}} {{
+                        task.endTime }}
+                    </p>
+                </div>
+            </div>
+        </p-card>
+    </div>
+</div>
