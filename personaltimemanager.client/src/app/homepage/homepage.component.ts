@@ -47,15 +47,10 @@ export class HomepageComponent implements OnInit {
       }))
       .subscribe({
         next: (response: CustomResponse) => {
-          console.log(response);
           this.tasks = response.data;
         },
         error: (response: HttpErrorResponse) => {
-          console.log(response);
           this.tasks = [];
-        },
-        complete: () => {
-          console.log('completed');
         }
       });
   }
@@ -69,15 +64,10 @@ export class HomepageComponent implements OnInit {
       }))
       .subscribe({
         next: (response: CustomResponse) => {
-          console.log(response);
           this.tasks = response.data;
         },
         error: (response: HttpErrorResponse) => {
-          console.log(response);
           this.tasks = [];
-        },
-        complete: () => {
-          console.log('completed');
         }
       });
   }
@@ -90,7 +80,6 @@ export class HomepageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'deleted') {
-        console.log('Task deleted successfully!');
         this.tasks = this.tasks.filter(t => t.id !== task.id);
       }
     });
@@ -103,12 +92,10 @@ export class HomepageComponent implements OnInit {
   }
 
   onDateChange(): void {
-    console.log('date changed');
     this.retrieveTasksByDate();
   }
 
   addTask(): void {
-    console.log('Add Task Button Clicked!');
     this.router.navigate(['tasks/new']);
   }
 
@@ -116,10 +103,9 @@ export class HomepageComponent implements OnInit {
     task.completed = !task.completed;
   }
 
-  changeTaskView(){
+  changeTaskView() {
     this.showTasksByDate = !this.showTasksByDate;
-    if(this.showTasksByDate)
-    {
+    if (this.showTasksByDate) {
       this.retrieveTasksByDate();
     }
     else {

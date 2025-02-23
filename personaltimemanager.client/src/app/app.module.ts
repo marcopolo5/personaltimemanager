@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { AddTaskComponent } from './add-task/add-task.component';
+import { AddTaskComponent } from './task-form/task-form.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';

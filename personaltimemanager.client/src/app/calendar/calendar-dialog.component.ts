@@ -24,7 +24,7 @@ export class CalendarDialogComponent {
 
   constructor(public dialog: MatDialog, private taskService: TaskService, private userSubject: UserSubject,
     public dialogRef: MatDialogRef<CalendarDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public task: any) {}
+    @Inject(MAT_DIALOG_DATA) public task: any) { }
 
   ngOnInit(): void {
     this.user = this.userSubject.getUser();
@@ -42,7 +42,6 @@ export class CalendarDialogComponent {
         this.close();
       },
       error: (error: any) => {
-        console.log('Error fetching tasks:', error);
         this.close();
       }
     });

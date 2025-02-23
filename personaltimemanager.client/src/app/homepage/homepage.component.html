@@ -1,7 +1,7 @@
 <div class="container home">
     <div class="home__navbar">
         <span>
-            Welcome, {{user.name.split(' ')[0]}}!
+          <i class="bi bi-person-fill"></i> Welcome, {{user.name.split(' ')[0]}}!
         </span>
         <button pButton class="button button--left button--right button--logout" (click)="logout()">
             Logout
@@ -40,11 +40,11 @@
     </div>
 
     <div class="task-list" *ngIf="tasks.length">
-        <p-card *ngFor="let task of tasks" class="task-card">
+        <p-card *ngFor="let task of tasks; index as i" class="task-card">
             <div class="task-header">
                 <div class="task-content" (click)="openTaskDetails(task)">
                     <h3 [ngClass]="{'completed-text': task.completed}">
-                        {{ task.name}}
+                        {{  (i + 1) + '. ' + task.name}}
                     </h3>
                     <p>
                         <span

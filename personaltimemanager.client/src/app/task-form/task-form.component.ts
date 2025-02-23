@@ -9,10 +9,10 @@ import { User } from '../models/User';
 import { Task } from '../models/Task';
 
 @Component({
-  selector: 'app-add-task',
+  selector: 'app-task-form',
   standalone: true,
-  templateUrl: './add-task.component.html',
-  styleUrls: ['./add-task.component.css'],
+  templateUrl: './task-form.component.html',
+  styleUrls: ['./task-form.component.css'],
   imports: [ReactiveFormsModule, CommonModule],
 })
 export class AddTaskComponent implements OnInit {
@@ -141,7 +141,7 @@ export class AddTaskComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 
 

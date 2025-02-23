@@ -3,6 +3,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TaskService } from '../services/task.service';
 import { Task } from '../models/Task';
+import { finalize } from 'rxjs';
+import { CustomResponse } from '../models/CustomResponse';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   standalone: false,
@@ -28,15 +31,10 @@ export class TaskDetailComponent {
       return;
     }
     this.taskService.deleteTask(task.userId, task.id).subscribe({
-      next: (response) => {
-        console.log(response);
+      next: (response: CustomResponse) => {
         this.dialogRef.close('deleted');
       },
-      error: (response) => {
-        console.log(response);
-      },
-      complete: () => {
-        console.log('completed');
+      error: (response: HttpErrorResponse) => {
       }
     });
   }

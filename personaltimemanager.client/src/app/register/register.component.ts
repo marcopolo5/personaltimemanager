@@ -42,7 +42,6 @@ export class RegisterComponent {
   onSubmit() {
     this.registerBtnText = 'Registering...';
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
 
       this.authService.register(this.registerForm.value)
         .pipe(
@@ -53,12 +52,10 @@ export class RegisterComponent {
           next: (response: CustomResponse) => {
             this.userSubject.setUser(response.user);
             this.tokenSubject.setToken(response.token);
-            console.log(response);
             this.router.navigate(['/']);
           },
           error: (response: HttpErrorResponse) => {
             this.errorMessage = response.error.message;
-            console.log(response);
           }
         });
 

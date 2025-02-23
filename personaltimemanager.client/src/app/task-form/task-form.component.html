@@ -1,0 +1,62 @@
+<div class="container">
+  <h2>{{task.id ? 'Update Task' : 'Add Task'}}</h2>
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="form__group">
+      <label for="task-name">Name</label>
+      <input type="text" id="task-name" class="form__control"
+        formControlName="name" placeholder="Ex. Homework">
+    </div>
+
+    <div class="form__group">
+      <label for="description">Description</label>
+      <textarea id="description" class="form__control" rows="6"
+        formControlName="description"
+        placeholder="Ex. Exercise 2 from page 20"></textarea>
+    </div>
+
+    <div class="form__group">
+      <label for="task-type">Type</label>
+      <select id="task-type" class="form__control" formControlName="taskType">
+        <option value disabled selected>Select task type</option>
+        <option value="one-time">One-time task</option>
+        <option value="ongoing-task">Ongoing task</option>
+      </select>
+    </div>
+
+    <div class="single--row">
+      <div class="form__group"
+        *ngIf="taskForm.get('taskType')?.value==='ongoing-task'">
+        <label for="start-date">Start Date</label>
+        <input type="date" id="start-date" class="form__control"
+          formControlName="startDate">
+      </div>
+
+      <div class="form__group"
+        *ngIf="taskForm.get('taskType')?.value==='ongoing-task'">
+        <label for="start-time">Start Time</label>
+        <input type="time" id="start-time" class="form__control"
+          formControlName="startTime">
+      </div>
+    </div>
+
+    <div class="single--row">
+      <div class="form__group">
+        <label for="deadline">Deadline</label>
+        <input type="date" id="deadline" class="form__control"
+          formControlName="deadline">
+      </div>
+
+      <div class="form__group">
+        <label for="deadline">End Time</label>
+        <input type="time" id="end-time" class="form__control"
+          formControlName="endTime">
+      </div>
+    </div>
+
+    <div class="single--row">
+      <button type="button" class="button" (click)="cancel()">Cancel</button>
+      <button type="submit" class="button"
+        [disabled]="taskForm.invalid || !isValidDateTimeRange()">Confirm</button>
+    </div>
+  </form>
+</div>
