@@ -4,6 +4,9 @@ import { AuthService } from '../services/auth.service';
 import { Router} from '@angular/router';
 import { UserSubject } from '../subjects/user.subject';
 import { finalize } from 'rxjs';
+import { TokenSubject } from '../subjects/token.subject';
+import { CustomResponse } from '../models/CustomResponse';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +22,13 @@ export class LoginComponent {
   loginBtnText = 'Login';
   showPassword = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private userSubject: UserSubject) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private userSubject: UserSubject,
+    private tokenSubject: TokenSubject
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
       password: ['', [Validators.required]]
@@ -39,13 +48,14 @@ export class LoginComponent {
           this.loginBtnText = 'Login';
         }))
       .subscribe({
-        next: (response) => {
+        next: (response: CustomResponse) => {
           this.userSubject.setUser(response.user);
+          this.tokenSubject.setToken(response.token);
           console.log(response);
           this.successMessage = response.message;
           this.router.navigate(['/home']);
         },
-        error: (response) => {
+        error: (response: HttpErrorResponse) => {
           this.errorMessage = response.error.message;
           console.log(response);
           this.errorMessage = response.error.message;
@@ -53,7 +63,7 @@ export class LoginComponent {
         complete: () => {
           console.log('completed');
         }
-      })
+      });
 
     }
   }

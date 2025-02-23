@@ -4,13 +4,20 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'tasks/new', component: AddTaskComponent },
-  { path: 'tasks/:taskId/edit', component: AddTaskComponent },
-  { path: 'home', component: HomepageComponent },
+  {
+    path: '',
+    canActivate: [authGuard],
+    children: [
+      { path: 'tasks/new', component: AddTaskComponent },
+      { path: 'tasks/:taskId/edit', component: AddTaskComponent },
+      { path: 'home', component: HomepageComponent }
+    ]
+  },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 

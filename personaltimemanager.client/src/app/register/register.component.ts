@@ -4,6 +4,9 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { UserSubject } from '../subjects/user.subject';
 import { finalize } from 'rxjs';
+import { TokenSubject } from '../subjects/token.subject';
+import { CustomResponse } from '../models/CustomResponse';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +23,13 @@ export class RegisterComponent {
   registerBtnText = 'Register';
   showPassword = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private userSubject: UserSubject) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private userSubject: UserSubject,
+    private tokenSubject: TokenSubject
+  ) {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -41,19 +50,17 @@ export class RegisterComponent {
             this.registerBtnText = 'Register';
           }))
         .subscribe({
-          next: (response) => {
+          next: (response: CustomResponse) => {
             this.userSubject.setUser(response.user);
+            this.tokenSubject.setToken(response.token);
             console.log(response);
             this.router.navigate(['/home']);
           },
-          error: (response) => {
+          error: (response: HttpErrorResponse) => {
             this.errorMessage = response.error.message;
             console.log(response);
-          },
-          complete: () => {
-            console.log('completed');
           }
-        })
+        });
 
     }
   }
