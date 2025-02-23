@@ -53,7 +53,7 @@ export class LoginComponent {
           this.tokenSubject.setToken(response.token);
           console.log(response);
           this.successMessage = response.message;
-          this.router.navigate(['/home']);
+          this.router.navigate(['/']);
         },
         error: (response: HttpErrorResponse) => {
           this.errorMessage = response.error.message;

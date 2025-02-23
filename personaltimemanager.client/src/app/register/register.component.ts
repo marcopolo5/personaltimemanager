@@ -54,7 +54,7 @@ export class RegisterComponent {
             this.userSubject.setUser(response.user);
             this.tokenSubject.setToken(response.token);
             console.log(response);
-            this.router.navigate(['/home']);
+            this.router.navigate(['/']);
           },
           error: (response: HttpErrorResponse) => {
             this.errorMessage = response.error.message;

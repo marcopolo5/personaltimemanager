@@ -18,7 +18,7 @@ public class TokenValidationMiddleware
     {
         var path = context.Request.Path.Value;
 
-        if (path.StartsWith("/api/Users/"))
+        if (path != null && path.StartsWith("/api/Users/"))
         {
             var segments = path.Split('/');
             if (segments.Length < 4)
@@ -46,7 +46,7 @@ public class TokenValidationMiddleware
                 return;
             }
 
-            string tokenUserId = GetUserIdFromToken(token);
+            string? tokenUserId = GetUserIdFromToken(token);
 
             if (string.IsNullOrEmpty(tokenUserId) || tokenUserId != requestedUserId)
             {
@@ -58,7 +58,7 @@ public class TokenValidationMiddleware
 
         await _next(context);
     }
-    private string GetUserIdFromToken(string token)
+    private string? GetUserIdFromToken(string token)
     {
         try
         {

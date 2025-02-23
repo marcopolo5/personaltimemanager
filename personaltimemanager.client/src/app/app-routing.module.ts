@@ -13,9 +13,9 @@ const routes: Routes = [
     path: '',
     canActivate: [authGuard],
     children: [
+      { path: '', component: HomepageComponent },
       { path: 'tasks/new', component: AddTaskComponent },
       { path: 'tasks/:taskId/edit', component: AddTaskComponent },
-      { path: 'home', component: HomepageComponent }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
