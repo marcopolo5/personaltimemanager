@@ -22,6 +22,7 @@ export class HomepageComponent implements OnInit {
   user!: User;
   selectedDate: string = new Date().toISOString().split("T")[0];
   loadingText = '';
+  showTasksByDate: boolean = true;
 
   constructor(public dialog: MatDialog,
     private router: Router,
@@ -33,13 +34,35 @@ export class HomepageComponent implements OnInit {
     if (!this.user) {
       this.router.navigate(['/login']);
     }
-    this.retrieveTasks();
+    this.retrieveTasksByDate();
   }
 
-  retrieveTasks() {
+  retrieveTasksByDate() {
     this.tasks = [];
     this.loadingText = 'Retrieving tasks...';
     this.taskService.getTasksByUserIdAndDate(this.user.uid, this.selectedDate)
+      .pipe(finalize(() => {
+        this.loadingText = '';
+      }))
+      .subscribe({
+        next: (response: CustomResponse) => {
+          console.log(response);
+          this.tasks = response.data;
+        },
+        error: (response: HttpErrorResponse) => {
+          console.log(response);
+          this.tasks = [];
+        },
+        complete: () => {
+          console.log('completed');
+        }
+      });
+  }
+
+  retrieveAllTasks() {
+    this.tasks = [];
+    this.loadingText = 'Retrieving tasks...';
+    this.taskService.getTasksByUserId(this.user.uid)
       .pipe(finalize(() => {
         this.loadingText = '';
       }))
@@ -80,7 +103,7 @@ export class HomepageComponent implements OnInit {
 
   onDateChange(): void {
     console.log('date changed');
-    this.retrieveTasks();
+    this.retrieveTasksByDate();
   }
 
   addTask(): void {
@@ -90,5 +113,16 @@ export class HomepageComponent implements OnInit {
 
   toggleTaskCompletion(task: Task): void {
     task.completed = !task.completed;
+  }
+
+  changeTaskView(){
+    this.showTasksByDate = !this.showTasksByDate;
+    if(this.showTasksByDate)
+    {
+      this.retrieveTasksByDate();
+    }
+    else {
+      this.retrieveAllTasks();
+    }
   }
 }
