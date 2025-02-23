@@ -1,11 +1,10 @@
 <div class="modal">
-  <h2>{{ task.taskName }}</h2>
+  <h2>{{ task.name }}</h2>
   <p><strong>Description:</strong> {{ task.description }}</p>
-  <p><strong>Type:</strong> {{ task.type }}</p>
-  <p><strong *ngIf="task.startTime !== '--:--'">From:</strong> {{ task.startTime
-    }}</p>
-  <p><strong>Until:</strong> {{ task.endTime }}</p>
-  <p><strong>Dates:</strong> {{ task.dates.join(', ') }}</p>
+  <p *ngIf="task.startTime !== '--:--'">
+    <strong>From:</strong> {{task.dates.at(0) | date : 'dd. MMM. YYYY'}}, {{ task.startTime}}
+  </p>
+  <p><strong>Until:</strong> {{task.dates.at(-1) | date : 'dd. MMM. YYYY'}},  {{ task.endTime }}</p>
 
   <div class="modal-actions">
     <button class="delete-btn" (click)="deleteTask(task)">Delete</button>
