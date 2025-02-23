@@ -1,8 +1,7 @@
 .container {
   text-align: center;
-  padding: 20px;
+  padding: 0 20px;
   background-color: #ffffff;
-  min-height: 100vh;
 }
 
 h2 {
@@ -79,9 +78,9 @@ h3 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  width:300px;
-  height:50px;
-  margin:auto;
+  width: 300px;
+  height: 50px;
+  margin: auto;
 }
 
 .calendar-btn {
@@ -111,10 +110,14 @@ h3 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
   cursor: pointer;
   transition: background-color 0.3s;
-  width:50%;
+  width: 50%;
   max-width: 200px;
 }
 
+
+.button:hover {
+  background-color: #ccc;
+}
 
 
 .home__header {
@@ -136,19 +139,37 @@ h3 {
 
 
 input[type="date"] {
-  width:50%;
-  height:30px;
-  border:none;
+  width: 50%;
+  height: 30px;
+  border: none;
 }
 
-.action__container input, .action__container p  {
-  padding:0;
-  width:45%;
-  height:50px;
+.action__container input,
+.action__container p {
+  padding: 0;
+  width: 45%;
+  height: 50px;
   text-align: center;
   vertical-align: baseline;
 }
 
-.action__container input  {
-  margin:2px 5px 0 0;
+.action__container input {
+  margin: 2px 5px 0 0;
+}
+
+.home__navbar {
+  width: 100%;
+  height: 30px;
+  margin: 0 0 10px;
+  padding-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.button--logout {
+  border: none;
+  width: 100px;
 }

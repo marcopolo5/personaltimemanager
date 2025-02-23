@@ -1,4 +1,12 @@
 <div class="container home">
+    <div class="home__navbar">
+        <span>
+            Welcome, {{user.name.split(' ')[0]}}!
+        </span>
+        <button pButton class="button button--left button--right button--logout" (click)="logout()">
+            Logout
+        </button>
+    </div>
     <div class="home__header">
         <div class="action__container">
             <button pButton class="button button--left"

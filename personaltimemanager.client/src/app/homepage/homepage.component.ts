@@ -27,7 +27,8 @@ export class HomepageComponent implements OnInit {
   constructor(public dialog: MatDialog,
     private router: Router,
     private taskService: TaskService,
-    private userSubject: UserSubject) { }
+    private userSubject: UserSubject,
+  ) { }
 
   ngOnInit(): void {
     this.user = this.userSubject.getUser();
@@ -124,5 +125,10 @@ export class HomepageComponent implements OnInit {
     else {
       this.retrieveAllTasks();
     }
+  }
+
+  logout() {
+    this.userSubject.clearUser();
+    this.router.navigate(['/login']);
   }
 }
