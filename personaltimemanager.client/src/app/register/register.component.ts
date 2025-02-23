@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { UserSubject } from '../subjects/user.subject';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -16,41 +17,65 @@ export class RegisterComponent {
   registerForm: FormGroup;
   errorMessage = '';
   successMessage = '';
+  registerBtnText = 'Register';
+  showPassword = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private userSubject: UserSubject) {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]]
     });
   }
 
-  onSubmit(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
+
+  onSubmit() {
+    this.registerBtnText = 'Registering...';
     if (this.registerForm.valid) {
       console.log(this.registerForm.value);
 
-      this.authService.register(this.registerForm.value).subscribe({
-        next: (response) => {
-          this.userSubject.setUser(response.user);
-          this.successMessage = response.message;
-          console.log(response);
-          this.router.navigate(['/home']);
-        },
-        error: (response) => {
-          this.errorMessage = response.error.message;
-          console.log(response);
-        },
-        complete: () => {
-          console.log('completed');
-        }
-      });
+      this.authService.register(this.registerForm.value)
+        .pipe(
+          finalize(() => {
+            this.registerBtnText = 'Register';
+          }))
+        .subscribe({
+          next: (response) => {
+            this.userSubject.setUser(response.user);
+            console.log(response);
+            this.router.navigate(['/home']);
+          },
+          error: (response) => {
+            this.errorMessage = response.error.message;
+            console.log(response);
+          },
+          complete: () => {
+            console.log('completed');
+          }
+        })
+
     }
   }
 
+
+  validatePassword(): boolean {
+    const password = this.registerForm.get('password')?.value;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return passwordRegex.test(password);
+  }
+
   passwordsMatch() {
-    return this.registerForm.get('password')?.value === this.registerForm.get('confirmPassword')?.value;
+    const password = this.registerForm.get('password')?.value;
+    const confirmPassword = this.registerForm.get('confirmPassword')?.value;
+    return password === confirmPassword;
+  }
+
+  isBtnDisabled() {
+    return this.registerForm.invalid || !this.passwordsMatch() || !this.validatePassword();
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }

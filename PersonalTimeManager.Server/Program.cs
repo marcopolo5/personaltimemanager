@@ -1,4 +1,4 @@
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,18 +7,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-// Initialize Firebase
 FirebaseApp.Create(new AppOptions
 {
     Credential = GoogleCredential.FromFile("Keys/serviceAccountKey.json")
 });
 Console.WriteLine("Firebase initialized successfully.");
 
-// Add CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularClient", policy =>
@@ -30,7 +27,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add Firebase Authentication Middleware
+builder.Services.AddHttpClient();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -45,15 +43,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
-// Add Controllers and Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure Middleware
 app.UseCors("AllowAngularClient");
 
 if (app.Environment.IsDevelopment())

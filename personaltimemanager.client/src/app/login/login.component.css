@@ -4,6 +4,10 @@ body {
   margin: 0;
 }
 
+input {
+  height: 15px;
+}
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -40,12 +44,18 @@ body {
 }
 
 .form-control {
-  width: 100%;
+  width: 93.5%;
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ddd;
   border-radius: 6px;
   transition: border-color 0.2s;
+}
+
+.input-group input {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-right: none;
 }
 
 .form-control:focus {
@@ -92,6 +102,24 @@ body {
 
 .register-link:hover {
   color: #1e7e34;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.input-group button {
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  margin-left: -1px;
+  height: 100%;
 }
 
 @media (max-width: 480px) {

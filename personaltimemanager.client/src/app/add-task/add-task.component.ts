@@ -92,7 +92,7 @@ export class AddTaskComponent implements OnInit {
       Name: this.taskForm.get('name')?.value,
       Description: this.taskForm.get('description')?.value,
       Type: this.taskForm.get('taskType')?.value,
-      StartTime: this.taskForm.get('startTime')?.value || null,
+      StartTime: (this.taskForm.get('taskType')?.value === 'one-time' ? null : this.taskForm.get('startTime')?.value) || null,
       EndTime: this.taskForm.get('endTime')?.value || null,
       Dates: this.generateDateList()
     };
@@ -176,16 +176,15 @@ export class AddTaskComponent implements OnInit {
 
   isValidDateTimeRange(): boolean {
 
+    const taskType = this.taskForm.get('taskType')?.value;
+    if (taskType === 'one-time') {
+      return true;
+    }
+
     const startDate = this.taskForm.get('startDate')?.value;
     const deadline = this.taskForm.get('deadline')?.value;
     const startTime = this.taskForm.get('startTime')?.value;
     const endTime = this.taskForm.get('endTime')?.value;
-
-    if (!startDate && (!startTime || startTime === '--:--') && deadline && endTime) {
-      return true;
-    }
-
-    console.log(startDate, deadline, startTime, endTime);
 
     const startDateTime = this.combineDateTime(startDate, startTime);
     const endDateTime = this.combineDateTime(deadline, endTime);
