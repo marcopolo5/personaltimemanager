@@ -1,14 +1,14 @@
-<div class="register-container">
-  <div class="register-card">
-      <h2>{{task.id ? 'Update Task #' + task.id : 'Add Task'}}</h2>
-      <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+<div class="container">
+  <div class="card">
+      <h2>{{task.id ? 'Update Task' : 'Add Task'}}</h2>
+      <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="form">
           <div class="form-group">
               <label for="task-name">Task Name</label>
-              <input type="text" id="task-name" class="form-control" formControlName="name" placeholder="Enter task name">
+              <input type="text" id="task-name" class="form-control" formControlName="name" placeholder="Ex. Homework">
           </div>
           <div class="form-group">
               <label for="description">Task Description</label>
-              <textarea id="description" class="form-control" rows="4" formControlName="description" placeholder="Enter task description"></textarea>
+              <textarea id="description" class="form-control" rows="6" formControlName="description" placeholder="Ex. Exercise 2 from page 20"></textarea>
           </div>
           <div class="form-group">
               <label for="task-type">Task Type</label>
@@ -23,24 +23,24 @@
                   <label for="start-date">Start Date</label>
                   <input type="date" id="start-date" class="form-control" formControlName="startDate">
               </div>
+              <div class="form-group" *ngIf="taskForm.get('taskType')?.value==='ongoing-task'">
+                  <label for="start-date">Start Time</label>
+                  <input type="time" id="start-time" class="form-control" formControlName="startTime">
+              </div>
+            </div>
+            <div class="form-container">
+              <div class="form-group">
+                <label for="deadline">End Time</label>
+                <input type="time" id="end-time" class="form-control" formControlName="endTime">
+              </div>
               <div class="form-group">
                   <label for="deadline">Deadline</label>
                   <input type="date" id="deadline" class="form-control" formControlName="deadline">
               </div>
-          </div>
-          <div class="form-container">
-            <div class="form-group" *ngIf="taskForm.get('taskType')?.value==='ongoing-task'">
-                <label for="start-date">Start Time</label>
-                <input type="time" id="start-time" class="form-control" formControlName="startTime">
-            </div>
-            <div class="form-group">
-                <label for="deadline">End Time</label>
-                <input type="time" id="end-time" class="form-control" formControlName="endTime">
-            </div>
         </div>
           <div class="form-buttons">
-              <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
-              <button type="submit" class="btn-register" [disabled]="taskForm.invalid || !isValidDateTimeRange()">{{task.id ? 'Update Task' : 'Add Task'}}</button>
+              <button type="button" class="button" (click)="cancel()">Cancel</button>
+              <button type="submit" class="button" [disabled]="taskForm.invalid || !isValidDateTimeRange()">Confirm</button>
           </div>
       </form>
   </div>
