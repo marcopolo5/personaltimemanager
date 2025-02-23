@@ -15,7 +15,7 @@ import { Task } from '../models/Task';
   styleUrls: ['./task-form.component.css'],
   imports: [ReactiveFormsModule, CommonModule],
 })
-export class AddTaskComponent implements OnInit {
+export class TaskFormComponent implements OnInit {
   DEFAULT_TASK: Task = {
     id: '',
     userId: '',

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import { AddTaskComponent } from './task-form/task-form.component';
+import { TaskFormComponent } from './task-form/task-form.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { authGuard } from './guards/auth.guard';
 
@@ -14,8 +14,8 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', component: HomepageComponent },
-      { path: 'tasks/new', component: AddTaskComponent },
-      { path: 'tasks/:taskId/edit', component: AddTaskComponent },
+      { path: 'tasks/new', component: TaskFormComponent },
+      { path: 'tasks/:taskId/edit', component: TaskFormComponent },
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }
