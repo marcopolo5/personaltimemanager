@@ -1,65 +1,62 @@
-<div class="register-container">
-  <div class="register-card">
+<div class="container">
     <h2>Register</h2>
+    <p *ngIf="errorMessage" class="error--text">{{errorMessage}}</p>
+    <p *ngIf="successMessage" class="success--text">{{successMessage}}</p>
     <p class="text--error" *ngIf="errorMessage">{{errorMessage}}</p>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" class="form-control"
-          formControlName="name" placeholder="Enter your name">
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" class="form-control"
-          formControlName="email" placeholder="Enter your email">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" class="form-control"
-          formControlName="password" placeholder="Enter your password">
-        <p class="error--text"
-          *ngIf="registerForm.get('password')?.value.length > 0 && this.registerForm.get('password')?.invalid">Password
-          must be at least 6 characters long.</p>
-        <div class="input-group">
-          <input
-            id="password"
-            [type]=" showPassword ? 'text' : 'password' "
-            class="form-control"
-            formControlName="password"
-            placeholder="Enter your password" />
-          <button type="button" (click)="togglePassword()">
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form">
+
+        <div class="form__group">
+            <label for="name">Name</label>
+            <input type="text" id="name" class="form__control"
+                formControlName="name" placeholder="Ex. John Doe">
+        </div>
+        <div class="form__group">
+            <label for="email">Email</label>
+            <input type="email" id="email" class="form__control"
+                formControlName="email" placeholder="johndoe@gmail.com">
+        </div>
+        <div class="form__group">
+            <label for="password">Password</label>
+            <input
+                id="password"
+                [type]=" showPassword ? 'text' : 'password' "
+                class="form__control"
+                formControlName="password"
+                placeholder="Enter your password" />
             <i class="bi"
-              [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
-          </button>
+                (click)="togglePassword()"
+                [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
+
+            <div class="text--error"
+                *ngIf="!validatePassword() && this.registerForm.get('password')?.value.length">
+                <p>Password must contain:</p>
+                <ul>
+                    <li>at least 8 characters</li>
+                    <li>1 small letter</li>
+                    <li>1 capital letter</li>
+                    <li>1 number</li>
+                    <li>1 special character</li>
+                </ul>
+            </div>
         </div>
-        <div class="text--error"
-          *ngIf="!validatePassword() && this.registerForm.get('password')?.value.length">
-          <p>Password must contain:</p>
-          <ul>
-            <li>at least 8 characters</li>
-            <li>1 small letter</li>
-            <li>1 capital letter</li>
-            <li>1 number</li>
-            <li>1 special character</li>
-          </ul>
+        <div class="form__group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" class="form__control"
+                formControlName="confirmPassword"
+                placeholder="Confirm your password">
+            <p class="text--error"
+                *ngIf="!passwordsMatch() && registerForm.get('confirmPassword')?.value.length">
+                Passwords do not
+                match
+            </p>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="confirm-password">Confirm Password</label>
-        <input type="password" id="confirm-password" class="form-control"
-          formControlName="confirmPassword" placeholder="Confirm your password">
-        <p class="text--error"
-          *ngIf="!passwordsMatch() && registerForm.get('confirmPassword')?.value.length">
-          Passwords do not
-          match
-        </p>
-      </div>
-      <button type="submit" class="btn-register"
-        [disabled]="registerForm.invalid || !passwordsMatch()">Register</button>
+        <button type="submit" class="button"
+            [disabled]="registerForm.invalid || !passwordsMatch()">Register</button>
     </form>
-    <p class="already-registered">
-      Already have an account? <a routerLink="/login" class="login-link">Click
-        here</a>
+    <p class="not-registered">
+        Not registered yet? <a class="register-link"
+            routerLink="/login">Click
+            here</a>
     </p>
-  </div>
 </div>

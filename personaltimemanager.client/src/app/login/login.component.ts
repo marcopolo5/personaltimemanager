@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -27,7 +27,8 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router,
     private userSubject: UserSubject,
-    private tokenSubject: TokenSubject
+    private tokenSubject: TokenSubject,
+    private cdr: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
@@ -58,7 +59,6 @@ export class LoginComponent {
             this.errorMessage = response.error.message;
           }
         });
-
     }
   }
 

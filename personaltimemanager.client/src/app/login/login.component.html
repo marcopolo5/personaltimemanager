@@ -1,41 +1,47 @@
-<div class="login-container">
-  <div class="login-card">
-    <h2>Login</h2>
-    <p *ngIf="errorMessage" class="error--text">{{errorMessage}}</p>
-    <p *ngIf="successMessage" class="success--text">{{successMessage}}</p>
-    <p class="text--error" *ngIf="errorMessage">{{errorMessage}}</p>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          class="form-control"
-          formControlName="email"
-          placeholder="Enter your email" />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
+<div class="container">
+  <h2>Login</h2>
+  <p *ngIf="errorMessage" class="error--text">{{errorMessage}}</p>
+  <p *ngIf="successMessage" class="success--text">{{successMessage}}</p>
+  <p class="text--error" *ngIf="errorMessage">{{errorMessage}}</p>
 
-        <div class="input-group">
-          <input
-            id="password"
-            [type]=" showPassword ? 'text' : 'password' "
-            class="form-control"
-            formControlName="password"
-            placeholder="Enter your password" />
-          <button type="button" (click)="togglePassword()">
-            <i class="bi"
-              [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
-          </button>
-        </div>
-      </div>
-      <button type="submit" class="btn-login"
-        [disabled]="loginForm.invalid">Login</button>
-    </form>
-    <p class="not-registered">
-      Not registered yet? <a class="register-link" routerLink="/register">Click
-        here</a>
-    </p>
-  </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
+
+    <div class="form__group">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        class="form__control"
+        formControlName="email"
+        placeholder="Ex. johndoe@gmail.com" />
+    </div>
+    <div class="form__group">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        [type]=" showPassword ? 'text' : 'password' "
+        class="form__control"
+        formControlName="password"
+        placeholder="********" />
+      <i class="bi"
+        (click)="togglePassword()"
+        [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
+    </div>
+    <button type="submit" class="button"
+      [disabled]="loginForm.invalid">Login</button>
+  </form>
+  <p class="not-registered">
+    Not registered yet? <a class="register-link" routerLink="/register">Click
+      here</a>
+  </p>
 </div>
+
+<!-- <div class="login-container">
+  <div class="login-card">
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    </form>
+
+  </div>
+</div> -->
