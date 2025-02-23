@@ -10,6 +10,7 @@ import { User } from '../models/User';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CustomResponse } from '../models/CustomResponse';
 import { finalize } from 'rxjs';
+import { TokenSubject } from '../subjects/token.subject';
 
 @Component({
   standalone: false,
@@ -28,6 +29,7 @@ export class HomepageComponent implements OnInit {
     private router: Router,
     private taskService: TaskService,
     private userSubject: UserSubject,
+    private tokenSubject: TokenSubject
   ) { }
 
   ngOnInit(): void {
@@ -115,6 +117,7 @@ export class HomepageComponent implements OnInit {
 
   logout() {
     this.userSubject.clearUser();
+    this.tokenSubject.clearToken();
     this.router.navigate(['/login']);
   }
 }
