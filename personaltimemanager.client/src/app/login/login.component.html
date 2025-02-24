@@ -1,8 +1,7 @@
 <div class="container">
   <h2>Login</h2>
-  <p *ngIf="errorMessage" class="error--text">{{errorMessage}}</p>
   <p *ngIf="successMessage" class="success--text">{{successMessage}}</p>
-  <p class="text--error" *ngIf="errorMessage">{{errorMessage}}</p>
+  <p *ngIf="errorMessage" class="error--text">{{errorMessage}}</p>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
 
