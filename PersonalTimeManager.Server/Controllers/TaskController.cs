@@ -129,13 +129,21 @@ public class TaskController : ControllerBase
         DocumentReference docRef = snapshot.Documents[0].Reference;
         request.UserId = userId;
         request.StartTime ??= "--:--";
+
+        if (request.Type == "one-time")
+        {
+            request.Dates = request.Dates != null && request.Dates.Any()
+            ? new List<string> { request.Dates.Last() }
+            : new List<string>();
+        }
+
         await docRef.SetAsync(request, SetOptions.Overwrite);
 
         return Ok(new { message = "Task updated successfully.", data = request });
     }
 
     [HttpPatch("{taskId}")]
-    public async Task<IActionResult> ToggleCompletion(string userId, string taskId)
+    public async Task<IActionResult> Update(string userId, string taskId)
     {
         Query query = _firestoreDb.Collection(CollectionName)
             .WhereEqualTo("Id", taskId)
@@ -155,7 +163,7 @@ public class TaskController : ControllerBase
 
         await docRef.SetAsync(existingTask, SetOptions.Overwrite);
 
-        return Ok(new { message = "Task completion status toggled successfully.", data = existingTask });
+        return Ok(new { message = "Task updated successfully.", data = existingTask });
     }
 
     [HttpDelete("{taskId}")]
