@@ -26,4 +26,6 @@ public class TaskEntity
 
     [FirestoreProperty]
     public List<string> Dates { get; set; }
+    [FirestoreProperty]
+    public bool IsCompleted { get; set; }
 }

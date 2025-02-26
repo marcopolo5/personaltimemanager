@@ -41,6 +41,7 @@ public class TaskController : ControllerBase
         DocumentReference docRef = await _firestoreDb.Collection(CollectionName).AddAsync(request);
 
         request.Id = docRef.Id;
+        request.IsCompleted = false;
 
         return StatusCode(201, new { message = "Task added successfully.", data = request });
     }
@@ -131,6 +132,30 @@ public class TaskController : ControllerBase
         await docRef.SetAsync(request, SetOptions.Overwrite);
 
         return Ok(new { message = "Task updated successfully.", data = request });
+    }
+
+    [HttpPatch("{taskId}")]
+    public async Task<IActionResult> ToggleCompletion(string userId, string taskId)
+    {
+        Query query = _firestoreDb.Collection(CollectionName)
+            .WhereEqualTo("Id", taskId)
+            .WhereEqualTo("UserId", userId);
+        QuerySnapshot snapshot = await query.GetSnapshotAsync();
+
+        if (snapshot.Documents.Count == 0)
+        {
+            return NotFound(new { message = "Task not found for this user." });
+        }
+
+        DocumentReference docRef = snapshot.Documents[0].Reference;
+        DocumentSnapshot docSnapshot = await docRef.GetSnapshotAsync();
+        TaskEntity existingTask = docSnapshot.ConvertTo<TaskEntity>();
+
+        existingTask.IsCompleted = !existingTask.IsCompleted;
+
+        await docRef.SetAsync(existingTask, SetOptions.Overwrite);
+
+        return Ok(new { message = "Task completion status toggled successfully.", data = existingTask });
     }
 
     [HttpDelete("{taskId}")]
