@@ -16,7 +16,7 @@
         formControlName="email" placeholder="johndoe@gmail.com">
       <p class="error--text text--left max--width"
         *ngIf="registerForm.get('email')?.value.length && registerForm.get('email')?.invalid">
-        Invalid email
+        Invalid email provided
       </p>
     </div>
     <div class="form__group text--left">
@@ -54,7 +54,7 @@
       </p>
     </div>
     <button type="submit" class="button"
-      [disabled]="registerForm.invalid || !passwordsMatch()">Register</button>
+      [disabled]="registerForm.invalid || !passwordsMatch()">{{registerBtnText}}</button>
   </form>
   <p class="not-registered">
     Not registered yet? <a class="register-link"

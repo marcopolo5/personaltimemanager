@@ -27,20 +27,10 @@
         [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
     </div>
     <button type="submit" class="button"
-      [disabled]="loginForm.invalid">Login</button>
+      [disabled]="loginForm.invalid">{{loginBtnText}}</button>
   </form>
   <p class="not-registered">
     Not registered yet? <a class="register-link" routerLink="/register">Click
       here</a>
   </p>
 </div>
-
-<!-- <div class="login-container">
-  <div class="login-card">
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
-    </form>
-
-  </div>
-</div> -->
