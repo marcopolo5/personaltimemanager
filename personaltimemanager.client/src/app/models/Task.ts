@@ -9,3 +9,16 @@ export interface Task {
   dates: string[];
   isCompleted: boolean;
 }
+
+
+export const DEFAULT_TASK: Task = {
+  id: '',
+  userId: '',
+  name: '',
+  description: '',
+  type: '',
+  startTime: '',
+  endTime: '',
+  dates: [],
+  isCompleted: false
+}

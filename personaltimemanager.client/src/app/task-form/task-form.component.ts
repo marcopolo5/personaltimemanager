@@ -6,7 +6,8 @@ import { TaskService } from '../services/task.service';
 import { CommonModule } from '@angular/common';
 import { UserSubject } from '../subjects/user.subject';
 import { User } from '../models/User';
-import { Task } from '../models/Task';
+import { DEFAULT_TASK, Task } from '../models/Task';
+import { CustomResponse } from '../models/CustomResponse';
 
 @Component({
   selector: 'app-task-form',
@@ -16,22 +17,9 @@ import { Task } from '../models/Task';
   imports: [ReactiveFormsModule, CommonModule],
 })
 export class TaskFormComponent implements OnInit {
-  DEFAULT_TASK: Task = {
-    ...{
-      id: '',
-      userId: '',
-      name: '',
-      description: '',
-      type: '',
-      startTime: '',
-      endTime: '',
-      dates: [],
-      isCompleted: false
-    }
-  };
 
   taskForm: FormGroup = new FormGroup({});
-  task: Task = { ...this.DEFAULT_TASK };
+  task: Task = { ...DEFAULT_TASK };
   user!: User;
 
   constructor(
@@ -44,7 +32,6 @@ export class TaskFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.user = this.userSubject.getUser();
-    console.log(this.user);
     const taskId = this.route.snapshot.paramMap.get('taskId') || '';
     if (taskId) {
       this.getTask(taskId);
@@ -58,15 +45,7 @@ export class TaskFormComponent implements OnInit {
       next: (response) => {
         this.task = response.data;
         this.initForm();
-        console.log(response);
-      },
-      error: (response) => {
-        console.log(response);
-      },
-      complete: () => {
-        console.log('completed');
-        this.initForm();
-      },
+      }
     });
   }
 
@@ -81,13 +60,10 @@ export class TaskFormComponent implements OnInit {
       startTime: [this.task.startTime || ''],
       endTime: [this.task.endTime || '', Validators.required],
     });
-
-    console.log(this.taskForm.value);
   }
 
   onSubmit(): void {
     if (!this.taskForm.valid) {
-      console.log('Form is invalid');
       return
     }
     const data = {
@@ -98,8 +74,6 @@ export class TaskFormComponent implements OnInit {
       EndTime: this.taskForm.get('endTime')?.value || null,
       Dates: this.generateDateList()
     };
-
-    console.log('Task Submitted:', this.taskForm.value, data, this.user);
 
     if (this.task.id) {
       this.updateTask(data);
@@ -113,32 +87,21 @@ export class TaskFormComponent implements OnInit {
   addTask(data: any) {
     this.taskService.addTask(this.user.uid, data).subscribe({
       next: (response) => {
-        console.log(response);
-        this.router.navigate(['/home']);
-      },
-      error: (response) => {
-        console.log(response);
-      },
-      complete: () => {
         this.taskForm.reset();
-        console.log('completed...');
+        this.router.navigate(['/home']);
       }
     });
   }
 
   updateTask(data: any) {
     this.taskService.updateTask(this.user.uid, this.task.id, data).subscribe({
-      next: (response) => {
-        console.log(response);
+      next: (response: CustomResponse) => {
+        this.taskForm.reset();
         this.router.navigate(['/home']);
       },
       error: (response) => {
         console.log(response);
       },
-      complete: () => {
-        this.taskForm.reset();
-        console.log('completed...');
-      }
     });
   }
 

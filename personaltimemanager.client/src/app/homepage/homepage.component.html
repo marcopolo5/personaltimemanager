@@ -14,12 +14,32 @@
       </button>
       <button pButton label="Add Task" icon="pi pi-plus" class="button button--right" (click)="addTask()"></button>
     </div>
+
+    <div class="action__container">
+      <p>Show:</p>
+      <select class="form-control" name="filter_completed" #filter (change)="filterTasksBy(filter.value)">
+        <option value="any">Any</option>
+        <option value="completed">Completed</option>
+        <option value="uncompleted">Uncompleted</option>
+      </select>
+    </div>
+    <div class="action__container">
+      <p>Sort by:</p>
+      <select class="form-control" name="filter_completed" #sortBy (change)="sortTasksBy(sortBy.value)">
+        <option value="default">Default</option>
+        <option value="name-asc">Name (Ascending)</option>
+        <option value="name-desc">Name (Descending)</option>
+        <option value="date-asc">Date (Ascending)</option>
+        <option value="date-desc">Date (Descending)</option>
+      </select>
+    </div>
     <div *ngIf="showTasksByDate" class="action__container">
-      <p>Select a Date: </p>
+      <p>Select a Date:</p>
       <input type="date" id="select-date" [(ngModel)]="selectedDate" (change)="onDateChange()" class="form-control">
     </div>
 
     <div class="home__header__title">
+      <hr>
       <h2 *ngIf="showTasksByDate">
         Tasks for {{selectedDate | date: 'dd MMM. yyyy'}}
       </h2>
@@ -27,15 +47,15 @@
     </div>
   </div>
 
-  <div *ngIf="!tasks.length && !loadingText">
+  <div *ngIf="!filteredTasks.length && !loadingText">
     <h3>No tasks were found.</h3>
   </div>
   <div *ngIf="loadingText">
     <h3>{{loadingText}}</h3>
   </div>
 
-  <div class="task-list" *ngIf="tasks.length">
-    <p-card *ngFor="let task of tasks; index as i" class="task-card">
+  <div class="task-list" *ngIf="filteredTasks.length">
+    <p-card *ngFor="let task of filteredTasks; index as i" class="task-card">
       <div class="task-header">
         <div class="task-content" (click)="openTaskDetails(task)">
           <h3 [ngClass]="{'completed-text': task.isCompleted}">

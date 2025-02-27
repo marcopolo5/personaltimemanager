@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CustomResponse } from '../models/CustomResponse';
 import { finalize } from 'rxjs';
 import { TokenSubject } from '../subjects/token.subject';
+import { TaskSubject } from '../subjects/task.subject';
 
 @Component({
   standalone: false,
@@ -20,16 +21,20 @@ import { TokenSubject } from '../subjects/token.subject';
 })
 export class HomepageComponent implements OnInit {
   tasks: Task[] = [];
+  filteredTasks: Task[] = [];
   user!: User;
   selectedDate: string = new Date().toISOString().split("T")[0];
   loadingText = '';
   showTasksByDate: boolean = true;
+  sortBy = 'default';
+  show = 'any';
 
   constructor(public dialog: MatDialog,
     private router: Router,
     private taskService: TaskService,
+    private tokenSubject: TokenSubject,
     private userSubject: UserSubject,
-    private tokenSubject: TokenSubject
+    private taskSubject: TaskSubject
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +42,11 @@ export class HomepageComponent implements OnInit {
     if (!this.user) {
       this.router.navigate(['/login']);
     }
+
+    this.taskSubject.tasks$.subscribe(tasks => {
+      this.tasks = tasks;
+      this.applyFilters();
+    });
     this.retrieveTasksByDate();
   }
 
@@ -49,10 +59,10 @@ export class HomepageComponent implements OnInit {
       }))
       .subscribe({
         next: (response: CustomResponse) => {
-          this.tasks = response.data;
+          this.taskSubject.setTasks(response.data);
         },
         error: (response: HttpErrorResponse) => {
-          this.tasks = [];
+          this.taskSubject.setTasks([]);
         }
       });
   }
@@ -66,10 +76,11 @@ export class HomepageComponent implements OnInit {
       }))
       .subscribe({
         next: (response: CustomResponse) => {
+          this.taskSubject.setTasks(response.data);
           this.tasks = response.data;
         },
         error: (response: HttpErrorResponse) => {
-          this.tasks = [];
+          this.taskSubject.setTasks([]);
         }
       });
   }
@@ -105,11 +116,9 @@ export class HomepageComponent implements OnInit {
     this.taskService.toggleTaskCompleted(this.user.uid, task.id)
       .subscribe({
         next: (response: CustomResponse) => {
-          console.log(response);
-          task = { ...response.data };
+          this.taskSubject.updateTask(response.data);
         },
         error: (response: HttpErrorResponse) => {
-          console.log(response);
         }
       });
   }
@@ -128,5 +137,44 @@ export class HomepageComponent implements OnInit {
     this.userSubject.clearUser();
     this.tokenSubject.clearToken();
     this.router.navigate(['/login']);
+  }
+
+
+  applyFilters() {
+    switch (this.show) {
+      case 'completed':
+        this.filteredTasks = this.tasks.filter(task => task.isCompleted);
+        break;
+      case 'uncompleted':
+        this.filteredTasks = this.tasks.filter(task => !task.isCompleted);
+        break;
+      default:
+        this.filteredTasks = this.tasks;
+    }
+
+    switch (this.sortBy) {
+      case 'name-asc':
+        this.filteredTasks = this.filteredTasks.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        this.filteredTasks = this.filteredTasks.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case 'date-asc':
+        this.filteredTasks = this.filteredTasks.sort((a, b) => new Date(a.dates[0]).getTime() - new Date(b.dates[0]).getTime());
+        break;
+      case 'date-desc':
+        this.filteredTasks = this.filteredTasks.sort((a, b) => new Date(b.dates[0]).getTime() - new Date(a.dates[0]).getTime());
+        break;
+    }
+  }
+
+  sortTasksBy(value: string) {
+    this.sortBy = value;
+    this.applyFilters();
+  }
+
+  filterTasksBy(value: string) {
+    this.show = value;
+    this.applyFilters();
   }
 }
