@@ -102,7 +102,16 @@ export class HomepageComponent implements OnInit {
   }
 
   toggleTaskCompletion(task: Task): void {
-    task.completed = !task.completed;
+    this.taskService.toggleTaskCompleted(this.user.uid, task.id)
+      .subscribe({
+        next: (response: CustomResponse) => {
+          console.log(response);
+          task = { ...response.data };
+        },
+        error: (response: HttpErrorResponse) => {
+          console.log(response);
+        }
+      });
   }
 
   changeTaskView() {

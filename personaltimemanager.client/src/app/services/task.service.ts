@@ -34,6 +34,10 @@ export class TaskService {
     return this.http.put<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks/${taskId}`, data);
   }
 
+  toggleTaskCompleted(userId: string, taskId: string): Observable<CustomResponse> {
+    return this.http.patch<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks/${taskId}`, {});
+  }
+
   deleteTask(userId: string, taskId: string): Observable<CustomResponse> {
     return this.http.delete<CustomResponse>(`${this.apiUrl}/Users/${userId}/Tasks/${taskId}`);
   }

@@ -1,66 +1,63 @@
 <div class="container home">
-    <div class="home__navbar">
-        <span>
-          <i class="bi bi-person-fill"></i> Welcome, {{user.name.split(' ')[0]}}!
-        </span>
-        <button pButton class="button button--left button--right button--logout" (click)="logout()">
-            Logout
+  <div class="home__navbar">
+    <span>
+      <i class="bi bi-person-fill"></i> Welcome, {{user.name.split(' ')[0]}}!
+    </span>
+    <button pButton class="button button--left button--right button--logout" (click)="logout()">
+      Logout
+    </button>
+  </div>
+  <div class="home__header">
+    <div class="action__container">
+      <button pButton class="button button--left" (click)="changeTaskView()">
+        {{ showTasksByDate ? "View all" : "View by date" }}
+      </button>
+      <button pButton label="Add Task" icon="pi pi-plus" class="button button--right" (click)="addTask()"></button>
+    </div>
+    <div *ngIf="showTasksByDate" class="action__container">
+      <p>Select a Date: </p>
+      <input type="date" id="select-date" [(ngModel)]="selectedDate" (change)="onDateChange()" class="form-control">
+    </div>
+
+    <div class="home__header__title">
+      <h2 *ngIf="showTasksByDate">
+        Tasks for {{selectedDate | date: 'dd MMM. yyyy'}}
+      </h2>
+      <h2 *ngIf="!showTasksByDate">All Tasks</h2>
+    </div>
+  </div>
+
+  <div *ngIf="!tasks.length && !loadingText">
+    <h3>No tasks were found.</h3>
+  </div>
+  <div *ngIf="loadingText">
+    <h3>{{loadingText}}</h3>
+  </div>
+
+  <div class="task-list" *ngIf="tasks.length">
+    <p-card *ngFor="let task of tasks; index as i" class="task-card">
+      <div class="task-header">
+        <div class="task-content" (click)="openTaskDetails(task)">
+          <h3 [ngClass]="{'completed-text': task.isCompleted}">
+            {{ (i + 1) + '. ' + task.name}}
+          </h3>
+          <p>
+            <span *ngIf="task.startTime && task.startTime !== '--:--' ">
+              <strong>From </strong>
+              {{task.dates[0] | date: 'dd MMM. yyyy'}},
+              {{task.startTime }}
+            </span>
+          </p>
+          <p>
+            <strong>Until </strong>
+            {{task.dates.at(-1) | date: 'dd MMM. yyyy'}} {{
+            task.endTime }}
+          </p>
+        </div>
+        <button class="complete-btn" [class.completed]="task.isCompleted" (click)="toggleTaskCompletion(task)">
+          {{ task.isCompleted ? "Undo" : "Complete" }}
         </button>
-    </div>
-    <div class="home__header">
-        <div class="action__container">
-            <button pButton class="button button--left"
-                (click)="changeTaskView()">
-                {{ showTasksByDate ? "View all" : "View by date" }}
-            </button>
-            <button pButton label="Add Task" icon="pi pi-plus"
-                class="button button--right"
-                (click)="addTask()"></button>
-        </div>
-        <div *ngIf="showTasksByDate" class="action__container">
-            <p>Select a Date: </p>
-            <input type="date" id="select-date" [(ngModel)]="selectedDate"
-                (change)="onDateChange()"
-                class="form-control">
-        </div>
-
-        <div class="home__header__title">
-            <h2 *ngIf="showTasksByDate">
-                Tasks for {{selectedDate | date: 'dd MMM. yyyy'}}
-            </h2>
-            <h2 *ngIf="!showTasksByDate">All Tasks</h2>
-        </div>
-    </div>
-
-    <div *ngIf="!tasks.length && !loadingText">
-        <h3>No tasks were found.</h3>
-    </div>
-    <div *ngIf="loadingText">
-        <h3>{{loadingText}}</h3>
-    </div>
-
-    <div class="task-list" *ngIf="tasks.length">
-        <p-card *ngFor="let task of tasks; index as i" class="task-card">
-            <div class="task-header">
-                <div class="task-content" (click)="openTaskDetails(task)">
-                    <h3 [ngClass]="{'completed-text': task.completed}">
-                        {{  (i + 1) + '. ' + task.name}}
-                    </h3>
-                    <p>
-                        <span
-                            *ngIf="task.startTime && task.startTime !== '--:--' ">
-                            <strong>From </strong>
-                            {{task.dates[0] | date: 'dd MMM. yyyy'}},
-                            {{task.startTime }}
-                        </span>
-                    </p>
-                    <p>
-                        <strong>Until </strong>
-                        {{task.dates.at(-1) | date: 'dd MMM. yyyy'}} {{
-                        task.endTime }}
-                    </p>
-                </div>
-            </div>
-        </p-card>
-    </div>
+      </div>
+    </p-card>
+  </div>
 </div>

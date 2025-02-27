@@ -7,5 +7,5 @@ export interface Task {
   startTime: string;
   endTime: string;
   dates: string[];
-  completed: boolean;
+  isCompleted: boolean;
 }

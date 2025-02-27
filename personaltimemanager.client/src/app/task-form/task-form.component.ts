@@ -17,16 +17,18 @@ import { Task } from '../models/Task';
 })
 export class TaskFormComponent implements OnInit {
   DEFAULT_TASK: Task = {
-    id: '',
-    userId: '',
-    name: '',
-    description: '',
-    type: '',
-    startTime: '',
-    endTime: '',
-    dates: [],
-    completed: false
-  }
+    ...{
+      id: '',
+      userId: '',
+      name: '',
+      description: '',
+      type: '',
+      startTime: '',
+      endTime: '',
+      dates: [],
+      isCompleted: false
+    }
+  };
 
   taskForm: FormGroup = new FormGroup({});
   task: Task = { ...this.DEFAULT_TASK };
