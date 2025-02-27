@@ -113,7 +113,12 @@ export class HomepageComponent implements OnInit {
   }
 
   toggleTaskCompletion(task: Task): void {
+    this.loadingText = 'Please wait...';
     this.taskService.toggleTaskCompleted(this.user.uid, task.id)
+      .pipe(
+        finalize(() => {
+          this.loadingText = '';
+        }))
       .subscribe({
         next: (response: CustomResponse) => {
           this.taskSubject.updateTask(response.data);
@@ -149,21 +154,21 @@ export class HomepageComponent implements OnInit {
         this.filteredTasks = this.tasks.filter(task => !task.isCompleted);
         break;
       default:
-        this.filteredTasks = this.tasks;
+        this.filteredTasks = [...this.tasks];
     }
 
     switch (this.sortBy) {
       case 'name-asc':
-        this.filteredTasks = this.filteredTasks.sort((a, b) => a.name.localeCompare(b.name));
+        this.filteredTasks = [...this.filteredTasks].sort((a, b) => a.name.localeCompare(b.name));
         break;
       case 'name-desc':
-        this.filteredTasks = this.filteredTasks.sort((a, b) => b.name.localeCompare(a.name));
+        this.filteredTasks = [...this.filteredTasks].sort((a, b) => b.name.localeCompare(a.name));
         break;
       case 'date-asc':
-        this.filteredTasks = this.filteredTasks.sort((a, b) => new Date(a.dates[0]).getTime() - new Date(b.dates[0]).getTime());
+        this.filteredTasks = [...this.filteredTasks].sort((a, b) => new Date(a.dates[0]).getTime() - new Date(b.dates[0]).getTime());
         break;
       case 'date-desc':
-        this.filteredTasks = this.filteredTasks.sort((a, b) => new Date(b.dates[0]).getTime() - new Date(a.dates[0]).getTime());
+        this.filteredTasks = [...this.filteredTasks].sort((a, b) => new Date(b.dates[0]).getTime() - new Date(a.dates[0]).getTime());
         break;
     }
   }

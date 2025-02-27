@@ -186,3 +186,7 @@ select {
   border-radius: 5px;
   width:50%;
 }
+
+.loading__text {
+  margin-top:-20px;
+}

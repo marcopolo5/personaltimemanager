@@ -3,6 +3,9 @@
     <span>
       <i class="bi bi-person-fill"></i> Welcome, {{user.name.split(' ')[0]}}!
     </span>
+    <div *ngIf="loadingText" class="loading__text">
+      <h3>{{loadingText}}</h3>
+    </div>
     <button pButton class="button button--left button--right button--logout" (click)="logout()">
       Logout
     </button>
@@ -49,9 +52,6 @@
 
   <div *ngIf="!filteredTasks.length && !loadingText">
     <h3>No tasks were found.</h3>
-  </div>
-  <div *ngIf="loadingText">
-    <h3>{{loadingText}}</h3>
   </div>
 
   <div class="task-list" *ngIf="filteredTasks.length">
