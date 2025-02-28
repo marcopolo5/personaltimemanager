@@ -8,6 +8,8 @@ import { UserSubject } from '../subjects/user.subject';
 import { User } from '../models/User';
 import { DEFAULT_TASK, Task } from '../models/Task';
 import { CustomResponse } from '../models/CustomResponse';
+import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-task-form',
@@ -21,6 +23,8 @@ export class TaskFormComponent implements OnInit {
   taskForm: FormGroup = new FormGroup({});
   task: Task = { ...DEFAULT_TASK };
   user!: User;
+  errorMessage = '';
+  confirmBtnText = 'Confirm';
 
   constructor(
     private fb: FormBuilder,
@@ -35,8 +39,6 @@ export class TaskFormComponent implements OnInit {
     const taskId = this.route.snapshot.paramMap.get('taskId') || '';
     if (taskId) {
       this.getTask(taskId);
-    } else {
-
     }
   }
 
@@ -85,17 +87,34 @@ export class TaskFormComponent implements OnInit {
 
 
   addTask(data: any) {
-    this.taskService.addTask(this.user.uid, data).subscribe({
-      next: (response) => {
-        this.taskForm.reset();
-        this.router.navigate(['/home']);
-      }
-    });
+    this.errorMessage = '';
+    this.confirmBtnText = 'Please wait...';
+    this.taskService.addTask(this.user.uid, data)
+      .pipe(
+        finalize(() => {
+          this.confirmBtnText = 'Confirm';
+        }))
+      .subscribe({
+        next: () => {
+          this.taskForm.reset();
+          this.router.navigate(['/home']);
+        },
+        error: (response: HttpErrorResponse) => {
+          this.errorMessage = response.error.message || 'Failed to connect to server.'
+        }
+      });
   }
 
   updateTask(data: any) {
-    this.taskService.updateTask(this.user.uid, this.task.id, data).subscribe({
-      next: (response: CustomResponse) => {
+    this.errorMessage = '';
+    this.confirmBtnText = 'Please wait...';
+    this.taskService.updateTask(this.user.uid, this.task.id, data)
+    .pipe(
+      finalize(() => {
+        this.confirmBtnText = 'Confirm';
+      }))
+    .subscribe({
+      next: () => {
         this.taskForm.reset();
         this.router.navigate(['/home']);
       },
