@@ -13,7 +13,12 @@ h2 {
   flex-direction: column;
   gap: 15px;
   align-items: center;
+  max-height:50vh;
+  width:100%;
+  overflow-y: auto;
+  padding:10px;
 }
+
 
 .task-card {
   width: 50%;
@@ -68,6 +73,10 @@ h2 {
   transform: scale(1.05);
 }
 
+.complete-btn:disabled {
+  cursor:not-allowed;
+}
+
 .completed-text {
   text-decoration: line-through;
   color: gray;
@@ -85,7 +94,7 @@ h3 {
   width: 300px;
   height: 50px;
   margin: auto;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
 .calendar-btn {
@@ -165,7 +174,6 @@ input[type="date"] {
 .home__navbar {
   width: 100%;
   height: 30px;
-  margin: 0 0 10px;
   padding-bottom: 5px;
   display: flex;
   flex-direction: row;
@@ -180,13 +188,43 @@ input[type="date"] {
 }
 
 select {
-  border:none;
-  height:40px;
+  border: none;
+  height: 40px;
   border: 1px solid #000;
   border-radius: 5px;
-  width:50%;
+  width: 50%;
 }
 
 .loading__text {
-  margin-top:-20px;
+  margin-top: -20px;
+}
+
+#select-date {
+  font-size: 1.5rem;
+  width: 170px;
+  color: #28a745;
+  font-weight: bold;
+}
+
+#select-date:hover {
+  cursor: pointer;
+}
+
+#select-date:focus, #select-date:active {
+  border:none !important;
+}
+
+
+.action__container select:first-of-type {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.action__container select:last-of-type {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.home__header__title {
+  width:300px;
 }

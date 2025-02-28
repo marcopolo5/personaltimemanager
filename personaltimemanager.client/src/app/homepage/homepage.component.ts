@@ -33,8 +33,8 @@ export class HomepageComponent implements OnInit {
     'default': 'Default',
     'name-asc': 'Name (Ascending)',
     'name-desc': 'Name (Descending)',
-    'date-asc': 'Date (Ascending)',
-    'date-desc': 'Date (Descending)'
+    'date-asc': 'Due date (Ascending)',
+    'date-desc': 'Due date (Descending)'
   };
 
   showTaskTypesValues = {
@@ -83,7 +83,7 @@ export class HomepageComponent implements OnInit {
   }
 
   retrieveTasksByDate() {
-    this.tasks = [];
+    this.taskSubject.setTasks([]);
     this.loadingText = 'Retrieving tasks...';
     this.taskService.getTasksByUserIdAndDate(this.user.uid, this.selectedDate)
       .pipe(finalize(() => {
@@ -100,7 +100,7 @@ export class HomepageComponent implements OnInit {
   }
 
   retrieveAllTasks() {
-    this.tasks = [];
+    this.taskSubject.setTasks([]);
     this.loadingText = 'Retrieving tasks...';
     this.taskService.getTasksByUserId(this.user.uid)
       .pipe(finalize(() => {
@@ -193,10 +193,10 @@ export class HomepageComponent implements OnInit {
         this.filteredTasks = [...this.filteredTasks].sort((a, b) => b.name.localeCompare(a.name));
         break;
       case 'date-asc':
-        this.filteredTasks = [...this.filteredTasks].sort((a, b) => new Date(a.dates[0]).getTime() - new Date(b.dates[0]).getTime());
+        this.filteredTasks = [...this.filteredTasks].sort((a, b) => new Date(a.dates[a.dates.length - 1]).getTime() - new Date(b.dates[b.dates.length - 1]).getTime());
         break;
       case 'date-desc':
-        this.filteredTasks = [...this.filteredTasks].sort((a, b) => new Date(b.dates[0]).getTime() - new Date(a.dates[0]).getTime());
+        this.filteredTasks = [...this.filteredTasks].sort((a, b) => new Date(b.dates[b.dates.length - 1]).getTime() - new Date(a.dates[a.dates.length - 1]).getTime());
         break;
     }
   }

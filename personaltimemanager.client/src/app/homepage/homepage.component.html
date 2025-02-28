@@ -19,30 +19,26 @@
     </div>
 
     <div class="action__container">
-      <p>Show:</p>
-      <select class="form-control" name="filter_completed" #filter (change)="showTaskType(filter.value)">
+      <select class="form-control" #filter (change)="showTaskType(filter.value)">
+        <option value="" disabled>Show</option>
         <option *ngFor="let item of showTaskTypesValues | keyvalue" [value]="item.key"
           [selected]="userPreferences.showTaskType === item.key">{{item.value}}</option>
       </select>
-    </div>
-    <div class="action__container">
-      <p>Sort by:</p>
-      <select class="form-control" name="filter_completed" #sortBy (change)="sortTasksBy(sortBy.value)">
+
+      <select class="form-control" #sortBy (change)="sortTasksBy(sortBy.value)">
+        <option value="" disabled>Sort by</option>
         <option *ngFor="let item of sortTasksByValues | keyvalue" [value]="item.key"
           [selected]="userPreferences.sortTasksBy === item.key">{{item.value}}</option>
       </select>
     </div>
-    <div *ngIf="!userPreferences.showAllTasks" class="action__container">
-      <p>Select a Date:</p>
-      <input type="date" id="select-date" [(ngModel)]="selectedDate" (change)="onDateChange()" class="form-control">
-    </div>
-
     <div class="home__header__title">
       <hr>
       <h2 *ngIf="!userPreferences.showAllTasks">
-        Tasks for {{selectedDate | date: 'dd MMM. yyyy'}}
+        Tasks for <input type="date" id="select-date" [(ngModel)]="selectedDate" (change)="onDateChange()"
+          class="form-control">
       </h2>
       <h2 *ngIf="userPreferences.showAllTasks">All Tasks</h2>
+      <hr>
     </div>
   </div>
 
@@ -70,7 +66,8 @@
             task.endTime }}
           </p>
         </div>
-        <button class="complete-btn" [class.completed]="task.isCompleted" (click)="toggleTaskCompletion(task)">
+        <button class="complete-btn" [class.completed]="task.isCompleted" (click)="toggleTaskCompletion(task)"
+          [disabled]="loadingText">
           {{ task.isCompleted ? "Undo" : "Complete" }}
         </button>
       </div>
