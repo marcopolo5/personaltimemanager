@@ -12,6 +12,8 @@ import { CustomResponse } from '../models/CustomResponse';
 import { finalize } from 'rxjs';
 import { TokenSubject } from '../subjects/token.subject';
 import { TaskSubject } from '../subjects/task.subject';
+import { UserPreferencesSubject } from '../subjects/userPreferences';
+import { DEFAULT_USER_PREFERENCES } from '../models/UserPreferences';
 
 @Component({
   standalone: false,
@@ -25,29 +27,59 @@ export class HomepageComponent implements OnInit {
   user!: User;
   selectedDate: string = new Date().toISOString().split("T")[0];
   loadingText = '';
-  showTasksByDate: boolean = true;
-  sortBy = 'default';
-  show = 'any';
+  userPreferences = DEFAULT_USER_PREFERENCES;
+
+  sortTasksByValues = {
+    'default': 'Default',
+    'name-asc': 'Name (Ascending)',
+    'name-desc': 'Name (Descending)',
+    'date-asc': 'Date (Ascending)',
+    'date-desc': 'Date (Descending)'
+  };
+
+  showTaskTypesValues = {
+    'any': 'Any',
+    'completed': 'Completed',
+    'uncompleted': 'Uncompleted'
+  };
 
   constructor(public dialog: MatDialog,
     private router: Router,
     private taskService: TaskService,
     private tokenSubject: TokenSubject,
     private userSubject: UserSubject,
-    private taskSubject: TaskSubject
+    private taskSubject: TaskSubject,
+    private userPreferencesSubject: UserPreferencesSubject
   ) { }
 
   ngOnInit(): void {
+
     this.user = this.userSubject.getUser();
     if (!this.user) {
       this.router.navigate(['/login']);
     }
 
+    this.userPreferencesSubject.userPreferences$.subscribe(preferences => {
+      this.userPreferences = preferences;
+      this.applyFilters();
+    });
+
     this.taskSubject.tasks$.subscribe(tasks => {
       this.tasks = tasks;
       this.applyFilters();
     });
-    this.retrieveTasksByDate();
+
+    this.getTasks();
+
+  }
+
+
+  getTasks() {
+    if (this.userPreferences.showAllTasks) {
+      this.retrieveAllTasks();
+    } else {
+      this.retrieveTasksByDate();
+    }
   }
 
   retrieveTasksByDate() {
@@ -61,7 +93,7 @@ export class HomepageComponent implements OnInit {
         next: (response: CustomResponse) => {
           this.taskSubject.setTasks(response.data);
         },
-        error: (response: HttpErrorResponse) => {
+        error: () => {
           this.taskSubject.setTasks([]);
         }
       });
@@ -129,13 +161,9 @@ export class HomepageComponent implements OnInit {
   }
 
   changeTaskView() {
-    this.showTasksByDate = !this.showTasksByDate;
-    if (this.showTasksByDate) {
-      this.retrieveTasksByDate();
-    }
-    else {
-      this.retrieveAllTasks();
-    }
+    this.userPreferencesSubject.showAllTasks(!this.userPreferences.showAllTasks);
+
+    this.getTasks();
   }
 
   logout() {
@@ -146,7 +174,7 @@ export class HomepageComponent implements OnInit {
 
 
   applyFilters() {
-    switch (this.show) {
+    switch (this.userPreferences.showTaskType) {
       case 'completed':
         this.filteredTasks = this.tasks.filter(task => task.isCompleted);
         break;
@@ -157,7 +185,7 @@ export class HomepageComponent implements OnInit {
         this.filteredTasks = [...this.tasks];
     }
 
-    switch (this.sortBy) {
+    switch (this.userPreferences.sortTasksBy) {
       case 'name-asc':
         this.filteredTasks = [...this.filteredTasks].sort((a, b) => a.name.localeCompare(b.name));
         break;
@@ -174,12 +202,10 @@ export class HomepageComponent implements OnInit {
   }
 
   sortTasksBy(value: string) {
-    this.sortBy = value;
-    this.applyFilters();
+    this.userPreferencesSubject.setSortTasksBy(value);
   }
 
-  filterTasksBy(value: string) {
-    this.show = value;
-    this.applyFilters();
+  showTaskType(value: string) {
+    this.userPreferencesSubject.setShowTaskType(value);
   }
 }
