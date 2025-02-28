@@ -12,3 +12,12 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.error__list {
+  list-style: none;
+}
+
+
+.border--error {
+  border-color: red !important;
+}

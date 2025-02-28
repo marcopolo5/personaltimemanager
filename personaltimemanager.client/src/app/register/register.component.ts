@@ -41,6 +41,7 @@ export class RegisterComponent {
 
   onSubmit() {
     this.registerBtnText = 'Registering...';
+    this.errorMessage = '';
     if (this.registerForm.valid) {
 
       this.authService.register(this.registerForm.value)
@@ -55,7 +56,7 @@ export class RegisterComponent {
             this.router.navigate(['/']);
           },
           error: (response: HttpErrorResponse) => {
-            this.errorMessage = response.error.message;
+            this.errorMessage = response.error.message || 'Failed to connect to server.';
           }
         });
 
@@ -63,9 +64,44 @@ export class RegisterComponent {
   }
 
 
-  validatePassword(): boolean {
+  isValidPassword(): boolean {
+    return this.hasAtLeastEightCharacters()
+      && this.hasAtLeastOneSmallLetter()
+      && this.hasAtLeastOneCapitalLetter()
+      && this.hasAtLeastOneNumber()
+      && this.hasAtLeastOneSpecialCharacter();
+  }
+
+
+  hasAtLeastEightCharacters() {
     const password = this.registerForm.get('password')?.value;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return password.length >= 8;
+  }
+
+  hasAtLeastOneSmallLetter() {
+    const password = this.registerForm.get('password')?.value;
+    const passwordRegex = /[a-z]/;
+    return passwordRegex.test(password);
+  }
+
+
+  hasAtLeastOneNumber(): boolean {
+    const password = this.registerForm.get('password')?.value;
+    const passwordRegex = /\d/;
+    return passwordRegex.test(password);
+  }
+
+
+  hasAtLeastOneSpecialCharacter(): boolean {
+    const password = this.registerForm.get('password')?.value;
+    const passwordRegex = /[\W]/;
+    return passwordRegex.test(password);
+  }
+
+
+  hasAtLeastOneCapitalLetter() {
+    const password = this.registerForm.get('password')?.value;
+    const passwordRegex = /[A-Z]/;
     return passwordRegex.test(password);
   }
 
@@ -76,10 +112,21 @@ export class RegisterComponent {
   }
 
   isBtnDisabled() {
-    return this.registerForm.invalid || !this.passwordsMatch() || !this.validatePassword();
+    return this.registerForm.invalid || !this.passwordsMatch() || !this.isValidPassword();
   }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
+
+
+  getPasswordValidationClass(fn: () => boolean) {
+    return { 'success--text': fn(), 'error--text': !fn() }
+  }
+
+  getIconValidationClass(fn: () => boolean) {
+    return { 'bi-check-lg': fn(), 'bi-x-lg': !fn() }
+  }
+
+
 }

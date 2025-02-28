@@ -7,58 +7,67 @@
 
     <div class="form__group text--left">
       <label for="name">Name *</label>
-      <input type="text" id="name" class="form__control"
-        formControlName="name" placeholder="Ex. John Doe">
+      <input type="text" id="name" class="form__control" formControlName="name" placeholder="Ex. John Doe">
     </div>
     <div class="form__group text--left">
       <label for="email">Email *</label>
-      <input type="email" id="email" class="form__control"
-        formControlName="email" placeholder="johndoe@gmail.com">
+      <input type="email" id="email" class="form__control" placeholder="johndoe@gmail.com" formControlName="email"
+        [ngClass]="{'border--error': registerForm.get('email')?.value.length && registerForm.get('email')?.invalid}">
       <p class="error--text text--left max--width"
         *ngIf="registerForm.get('email')?.value.length && registerForm.get('email')?.invalid">
-        Invalid email provided
+        Invalid email provided.
       </p>
     </div>
     <div class="form__group text--left">
       <label for="password">Password *</label>
-      <input
-        id="password"
-        [type]=" showPassword ? 'text' : 'password' "
-        class="form__control"
-        formControlName="password"
-        placeholder="Enter your password" />
-      <i class="bi"
-        (click)="togglePassword()"
-        [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
+      <input id="password" class="form__control" formControlName="password" placeholder="Enter your password"
+        [type]=" showPassword ? 'text' : 'password'"
+        [ngClass]="{'border--error': !isValidPassword() && this.registerForm.get('password')?.value.length}" />
+      <i class="bi" (click)="togglePassword()" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
 
-      <div class="error--text text--left max--width"
-        *ngIf="!validatePassword() && this.registerForm.get('password')?.value.length">
-        <p>Password must contain:</p>
-        <ul>
-          <li>at least 8 characters</li>
-          <li>1 small letter</li>
-          <li>1 capital letter</li>
-          <li>1 number</li>
-          <li>1 special character</li>
+      <div class="text--left max--width" *ngIf="!isValidPassword() && this.registerForm.get('password')?.value.length">
+        <p [ngClass]="{'error--text' : !isValidPassword()}">Password must contain at least:</p>
+        <ul class="error__list">
+          <li [ngClass]="getPasswordValidationClass(hasAtLeastEightCharacters.bind(this))">
+            <i class="bi" [ngClass]="getIconValidationClass(hasAtLeastEightCharacters.bind(this))"></i>
+            8 characters
+          </li>
+          <li [ngClass]="getPasswordValidationClass(hasAtLeastOneSmallLetter.bind(this))">
+            <i class="bi" [ngClass]="getIconValidationClass(hasAtLeastOneSmallLetter.bind(this))"></i>
+            1 small letter
+          </li>
+          <li [ngClass]="getPasswordValidationClass(hasAtLeastOneCapitalLetter.bind(this))">
+            <i class="bi" [ngClass]="getIconValidationClass(hasAtLeastOneCapitalLetter.bind(this))"></i>
+            1 capital letter
+          </li>
+          <li [ngClass]="getPasswordValidationClass(hasAtLeastOneNumber.bind(this))">
+            <i class="bi" [ngClass]="getIconValidationClass(hasAtLeastOneNumber.bind(this))"></i>
+            1 number
+          </li>
+          <li [ngClass]="getPasswordValidationClass(hasAtLeastOneSpecialCharacter.bind(this))">
+            <i class="bi" [ngClass]="getIconValidationClass(hasAtLeastOneSpecialCharacter.bind(this))"></i>
+            1 special character
+          </li>
         </ul>
       </div>
     </div>
     <div class="form__group text--left">
       <label for="confirm-password">Confirm Password *</label>
-      <input type="password" id="confirm-password" class="form__control"
+      <input type="password" id="confirm-password" class="form__control" placeholder="Confirm your password"
         formControlName="confirmPassword"
-        placeholder="Confirm your password">
+        [ngClass]="{'border--error':!passwordsMatch() && registerForm.get('confirmPassword')?.value.length}">
       <p class="error--text text--left max--width"
         *ngIf="!passwordsMatch() && registerForm.get('confirmPassword')?.value.length">
-        Passwords do not match
+        Passwords do not match.
       </p>
     </div>
     <button type="submit" class="button"
-      [disabled]="registerForm.invalid || !passwordsMatch()">{{registerBtnText}}</button>
+      [disabled]="registerForm.invalid || !passwordsMatch() || registerBtnText !== 'Register'">
+      {{registerBtnText}}
+    </button>
   </form>
   <p class="not-registered">
-    Not registered yet? <a class="register-link"
-      routerLink="/login">Click
+    Not registered yet? <a class="register-link" routerLink="/login">Click
       here</a>
   </p>
 </div>
