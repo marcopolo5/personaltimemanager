@@ -44,7 +44,7 @@ export class TaskFormComponent implements OnInit {
 
   getTask(taskId: string) {
     this.taskService.getTaskById(this.user.uid, taskId).subscribe({
-      next: (response) => {
+      next: (response: CustomResponse) => {
         this.task = response.data;
         this.initForm();
       }
