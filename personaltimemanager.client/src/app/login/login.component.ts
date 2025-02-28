@@ -55,8 +55,7 @@ export class LoginComponent {
             this.router.navigate(['/']);
           },
           error: (response: HttpErrorResponse) => {
-            this.errorMessage = response.error.message;
-            this.errorMessage = response.error.message;
+            this.errorMessage = response.error.message || 'Failed to connect to server.';
           }
         });
     }

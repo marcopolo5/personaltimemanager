@@ -7,30 +7,20 @@
 
     <div class="form__group text--left">
       <label for="email">Email</label>
-      <input
-        id="email"
-        type="email"
-        class="form__control"
-        formControlName="email"
+      <input id="email" type="email" class="form__control" formControlName="email"
         placeholder="Ex. johndoe@gmail.com" />
     </div>
     <div class="form__group text--left">
       <label for="password">Password</label>
-      <input
-        id="password"
-        [type]=" showPassword ? 'text' : 'password' "
-        class="form__control"
-        formControlName="password"
-        placeholder="********" />
-      <i class="bi"
-        (click)="togglePassword()"
-        [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
+      <input id="password" [type]=" showPassword ? 'text' : 'password' " class="form__control"
+        formControlName="password" placeholder="********" />
+      <i class="bi" (click)="togglePassword()" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill' "></i>
     </div>
     <button type="submit" class="button"
-      [disabled]="loginForm.invalid">{{loginBtnText}}</button>
+      [disabled]="loginForm.invalid || this.loginBtnText !== 'Login'">{{loginBtnText}}</button>
   </form>
   <p class="not-registered">
-    Not registered yet? <a class="register-link" routerLink="/register">Click
-      here</a>
+    Not registered yet?
+    <a class="register-link" routerLink="/register">Click here</a>
   </p>
 </div>
