@@ -125,7 +125,7 @@ export class HomepageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'deleted') {
-        this.tasks = this.tasks.filter(t => t.id !== task.id);
+        this.taskSubject.removeTask(task);
       }
     });
   }
